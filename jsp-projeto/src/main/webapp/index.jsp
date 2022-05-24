@@ -8,6 +8,16 @@
 </head>
 <body>
 	
-	<h1> Ola mundo</h1>
+	<h1> Formulario </h1>
+	
+	<form action="paginaRecebe.jsp">
+	
+		<input name="nome" type="text" >
+		<input name="idade" type="text">
+		
+		<input type="submit" value="enviar">
+		
+	</form>
+	
 </body>
 </html>
