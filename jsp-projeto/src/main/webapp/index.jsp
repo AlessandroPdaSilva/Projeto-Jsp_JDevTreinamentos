@@ -6,18 +6,24 @@
 <meta charset="ISO-8859-1">
 <title>Projeto JSP</title>
 </head>
+
 <body>
 	
 	<h1> Formulario </h1>
 	
-	<form action="paginaRecebe.jsp">
+	<form action="ServletLogin" method="GET">
+		 
+		<label> Login:</label>
+		<input name="login" type="text" ><br>
 	
-		<input name="nome" type="text" >
-		<input name="idade" type="text">
-		
-		<input type="submit" value="enviar">
+	
+		<label>Senha:</label>
+		<input name="senha" type="password"><br>
+	
+		<input type="submit" value="enviar"> 
 		
 	</form>
+	${msgErro}
 	
 </body>
 </html>
