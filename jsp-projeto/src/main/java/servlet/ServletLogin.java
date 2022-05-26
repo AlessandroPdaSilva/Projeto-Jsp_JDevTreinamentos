@@ -26,18 +26,19 @@ public class ServletLogin extends HttpServlet {
 		String login = request.getParameter("login");
 		String senha = request.getParameter("senha");
 		 
-		 if(login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
+		 if(login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {// validacao vazio
 			
 			 Login log = new Login();
 			 log.setLogin(login);
 			 log.setSenha(senha);
 			 
 			 if( log.getLogin().equalsIgnoreCase("adm") && 
-					 log.getSenha().equalsIgnoreCase("adm")) {
+					 log.getSenha().equalsIgnoreCase("adm")) {//validacao usuario
 			 
 				 // sessao
 				 request.getSession().setAttribute("usuario", log.getLogin());
 				 
+				 // pagina principal
 				 RequestDispatcher r = request.getRequestDispatcher("principal/principal.jsp");
 				 r.forward(request, response);
 				 
