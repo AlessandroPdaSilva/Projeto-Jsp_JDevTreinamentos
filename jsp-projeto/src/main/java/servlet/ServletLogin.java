@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.Login;
 
-@WebServlet("/ServletLogin")
+@WebServlet(urlPatterns = {"/principal/ServletLogin","/ServletLogin"})
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -23,8 +23,14 @@ public class ServletLogin extends HttpServlet {
     //GET
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 
+	}
+	
+	//POST
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
 		String login = request.getParameter("login");
 		String senha = request.getParameter("senha");
+	 
 		 
 		 if(login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {// validacao vazio
 			
@@ -37,9 +43,9 @@ public class ServletLogin extends HttpServlet {
 			 
 				 // sessao
 				 request.getSession().setAttribute("usuario", log.getLogin());
-				 
+			 
 				 // pagina principal
-				 RequestDispatcher r = request.getRequestDispatcher("principal/principal.jsp");
+				 RequestDispatcher r = request.getRequestDispatcher("/principal/principal.jsp");
 				 r.forward(request, response);
 				 
 				 
@@ -58,11 +64,6 @@ public class ServletLogin extends HttpServlet {
 		 }
 		
 		 
-	}
-	
-	//POST
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
 	}
 
 }

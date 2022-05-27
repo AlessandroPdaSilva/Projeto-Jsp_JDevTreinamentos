@@ -13,7 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
  
-@WebFilter(urlPatterns = {"/filterAutenticacao/*"})
+@WebFilter(urlPatterns = {"/principal/*"})
 public class filterAutenticacao implements Filter {
 
     
@@ -31,14 +31,14 @@ public class filterAutenticacao implements Filter {
  
 		HttpServletRequest req = (HttpServletRequest) request;// request servlet
 		HttpSession sessao = req.getSession();// sessao
-		String url = req.getServletPath();// url da servlet
 		
 		String usuario = (String) sessao.getAttribute("usuario");
 		
-		if(usuario == null || usuario.isEmpty() && !url.contains("ServletLogin")) {// usuario nao existe
+		
+		if(usuario == null || usuario.isEmpty()) {// usuario nao existe
 			
-			RequestDispatcher redireciona = req.getRequestDispatcher("/index.jsp?url="+url);
-			req.setAttribute("msgErro", "Por favor fassa o login");
+			RequestDispatcher redireciona = req.getRequestDispatcher("/index.jsp");
+			req.setAttribute("msgErro", "Por favor fassa o login (filter te pegou)");
 			redireciona.forward(request, response);
 			return;
 		}else {

@@ -11,7 +11,8 @@
 	
 	<h1> Formulario </h1>
 	
-	<form action="ServletLogin" method="GET">
+	<form action="<%= request.getContextPath() %>/ServletLogin" method="POST">
+		 
 		 
 		<label> Login:</label>
 		<input name="login" type="text" ><br>
