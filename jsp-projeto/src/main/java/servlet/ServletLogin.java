@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.DAOLoginRepository;
 import model.Login;
 
 @WebServlet(urlPatterns = {"/principal/ServletLogin","/ServletLogin"})
@@ -38,23 +39,32 @@ public class ServletLogin extends HttpServlet {
 			 log.setLogin(login);
 			 log.setSenha(senha);
 			 
-			 if( log.getLogin().equalsIgnoreCase("adm") && 
-					 log.getSenha().equalsIgnoreCase("adm")) {//validacao usuario
+				 try {
+					
+							 DAOLoginRepository loginDao = new DAOLoginRepository();
+							 
+							 if(loginDao.autenticaLogin(log)) {//validacao usuario
+							 
+								 // sessao
+								 request.getSession().setAttribute("usuario", log.getLogin());
+							 
+								 // pagina principal
+								 RequestDispatcher r = request.getRequestDispatcher("/principal/principal.jsp");
+								 r.forward(request, response);
+								 
+								 
+							 }else {
+								 // ERRO LOGIN OU SENHA
+								 RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
+								 request.setAttribute("msgErro", "Login ou senha esta incorreto");
+								 redirecionar.forward(request, response);
+							 }
+					 
+				 } catch (Exception e) {
+					 e.printStackTrace();
+				 }
 			 
-				 // sessao
-				 request.getSession().setAttribute("usuario", log.getLogin());
 			 
-				 // pagina principal
-				 RequestDispatcher r = request.getRequestDispatcher("/principal/principal.jsp");
-				 r.forward(request, response);
-				 
-				 
-			 }else {
-				 // ERRO LOGIN OU SENHA
-				 RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
-				 request.setAttribute("msgErro", "Login ou senha esta incorreto");
-				 redirecionar.forward(request, response);
-			 }
 			 
 		 }else {
 			 // ERRO VAZIO
