@@ -23,7 +23,7 @@ public class ServletLogin extends HttpServlet {
     
     //GET
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
+		 doPost(request, response);
 	}
 	
 	//POST
