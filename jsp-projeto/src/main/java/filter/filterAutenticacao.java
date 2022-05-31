@@ -36,7 +36,7 @@ public class filterAutenticacao implements Filter {
 	}
  
 	// EXECUTA durante todo periodo 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain){
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException{
  
 		try {
 			
@@ -62,12 +62,19 @@ public class filterAutenticacao implements Filter {
 			
 		} catch (Exception e) {
 			
+			
 			try {
 				conexao.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
+			 
+			 // redirecionando para pagina de erro
+			 RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
+			 request.setAttribute("msgErro", e.getMessage());
+			 redirecionar.forward(request, response); 
+			
 		}
 			
 		
