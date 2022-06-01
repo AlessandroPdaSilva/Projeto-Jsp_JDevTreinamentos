@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mysql.cj.Session;
+
 import dao.DAOLoginRepository;
 import model.Login;
 
@@ -23,7 +25,20 @@ public class ServletLogin extends HttpServlet {
     
     //GET
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 doPost(request, response);
+		
+		String acao = request.getParameter("acao");
+		
+		if(acao.equalsIgnoreCase("logout")) {
+			
+			request.getSession().invalidate();
+			RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
+			redirecionar.forward(request, response);
+			
+		}else {
+			doPost(request, response);
+		}
+		
+		
 	}
 	
 	//POST
