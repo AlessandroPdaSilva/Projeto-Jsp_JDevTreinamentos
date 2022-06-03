@@ -61,7 +61,7 @@ public class ServletLogin extends HttpServlet {
 							 if(loginDao.autenticaLogin(log)) {//validacao usuario
 							 
 								 // sessao
-								 request.getSession().setAttribute("usuario", log.getLogin());
+								 request.getSession().setAttribute("login", log.getLogin());
 							 
 								 // pagina principal
 								 RequestDispatcher r = request.getRequestDispatcher("/principal/principal.jsp");

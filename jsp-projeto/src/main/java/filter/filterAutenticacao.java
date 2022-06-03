@@ -43,7 +43,7 @@ public class filterAutenticacao implements Filter {
 			HttpServletRequest req = (HttpServletRequest) request;// request servlet
 			HttpSession sessao = req.getSession();// sessao
 			
-			String usuario = (String) sessao.getAttribute("usuario");
+			String usuario = (String) sessao.getAttribute("login");
 			
 			
 			if(usuario == null || usuario.isEmpty()) {// usuario nao existe

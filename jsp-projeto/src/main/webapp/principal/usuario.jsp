@@ -47,21 +47,43 @@
                                                         <!--<span>Add class of <code>.form-control</code> with <code>&lt;input&gt;</code> tag</span>-->
                                                     </div>
                                                     <div class="card-block">
-                                                        <form class="form-material">
+                                                    	  
+                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" class="form-material" >
+                                                        	<div class="form-group form-default form-static-label">
+                                                                <input value="${usuario.id}" type="text" name="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">ID</label>
+                                                            </div>
+                                                        
                                                             <div class="form-group form-default">
-                                                                <input type="text" name="footer-email" class="form-control" required="">
+                                                                <input value="${usuario.nome}" type="text" name="nome" class="form-control" required="">
                                                                 <span class="form-bar"></span>
                                                                 <label class="float-label">Nome</label>
                                                             </div>
                                                             
                                                             <div class="form-group form-default">
-                                                                <input type="password" name="footer-email" class="form-control" required="">
+                                                                <input value="${usuario.email}" type="email" name="email" id="email" class="form-control" required="">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Email</label>
+                                                            </div>
+                                                            
+                                                            <div class="form-group form-default">
+                                                                <input value="${usuario.login}" type="text" name="login" class="form-control" required="">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Login</label>
+                                                            </div>
+                                                            
+                                                            <div class="form-group form-default">
+                                                                <input value="${usuario.senha}" type="password" name="senha" class="form-control" required="">
                                                                 <span class="form-bar"></span>
                                                                 <label class="float-label">Senha</label>
                                                             </div>
                                                             
                                                              
-                                                            <button class="btn btn-primary waves-effect waves-light">Enviar</button>
+                                                            <button class="btn btn-primary waves-effect waves-light">Novo</button>
+                                                            <button class="btn btn-success waves-effect waves-light">Salvar</button>
+                                                            <button class="btn btn-danger waves-effect waves-light">Excluir</button>
+                                                            
                                                         </form>
                                                     </div>
                                                 </div>
