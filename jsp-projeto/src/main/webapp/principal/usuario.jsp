@@ -87,6 +87,8 @@
                                                         </form>
                                                     </div>
                                                 </div>
+                                                
+                                                <span>${msgErro}</span>
                                             
                                             
                                             

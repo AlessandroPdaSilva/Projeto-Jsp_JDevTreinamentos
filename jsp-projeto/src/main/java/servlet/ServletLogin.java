@@ -18,6 +18,8 @@ import model.Login;
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	DAOLoginRepository loginDao = new DAOLoginRepository();
+	
 	//CONTRUTOR
     public ServletLogin() {
         super();
@@ -56,7 +58,7 @@ public class ServletLogin extends HttpServlet {
 			 
 				 try {
 					
-							 DAOLoginRepository loginDao = new DAOLoginRepository();
+							 
 							 
 							 if(loginDao.autenticaLogin(log)) {//validacao usuario
 							 
