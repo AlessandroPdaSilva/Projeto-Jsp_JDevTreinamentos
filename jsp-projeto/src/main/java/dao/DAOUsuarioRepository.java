@@ -54,6 +54,20 @@ public class DAOUsuarioRepository {
 		return this.getUsuarioByLogin(u.getLogin());
 	}
 	
+	// DELETAR
+	public void deletarUsuario(Long id) throws Exception {
+		
+		String sql = "DELETE FROM usuario WHERE id = ?";
+		PreparedStatement deleta = conexao.prepareStatement(sql);
+		deleta.setLong(1, id);
+		
+		deleta.executeUpdate();
+		
+		conexao.commit();
+		
+	}
+	
+	
 	// GET USUARIO BY LOGIN
 	public Login getUsuarioByLogin(String login) throws Exception {
 		

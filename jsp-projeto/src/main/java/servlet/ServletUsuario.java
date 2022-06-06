@@ -23,7 +23,27 @@ public class ServletUsuario extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+		String acao = request.getParameter("acao");
+		
+		if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("deletar")) {
+			String id = request.getParameter("id");
+			
+			try {
+				// DELETAR
+				usuarioDao.deletarUsuario(Long.parseLong(id));
+				response.getWriter().write("Deletado com sucesso!!");
+				
+			} catch (Exception e) {// erro deletar
+				
+				response.getWriter().write("Erro ao deletar!!");
+				e.printStackTrace();
+				
+			}
+		}
+		
+		
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

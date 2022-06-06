@@ -50,7 +50,7 @@
                                                     	  
                                                         <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" class="form-material" id="formulario">
                                                         	<div class="form-group form-default form-static-label">
-                                                                <input value="${usuario.id}" type="text" name="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
+                                                                <input value="${usuario.id}" type="text" name="id" id="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
                                                                 <span class="form-bar"></span>
                                                                 <label class="float-label">ID</label>
                                                             </div>
@@ -80,15 +80,15 @@
                                                             </div>
                                                             
                                                              
-                                                            <button class="btn btn-primary waves-effect waves-light" onclick="limparForm()">Novo</button>
-                                                            <button class="btn btn-success waves-effect waves-light">Salvar</button>
-                                                            <button class="btn btn-danger waves-effect waves-light">Excluir</button>
+                                                            <button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm()">Novo</button>
+                                                            <button type="submit" class="btn btn-success waves-effect waves-light">Salvar</button>
+                                                            <button type="button" class="btn btn-danger waves-effect waves-light" onclick="excluirUsuario()">Excluir</button>
                                                             
                                                         </form>
                                                     </div>
                                                 </div>
                                                 
-                                                <span>${msg}</span>
+                                                <span id="msg">${msg}</span>
                                             
                                             
                                             
@@ -114,6 +114,34 @@
     		    elementos[p].value = '';
     	    }
 		}
+    	
+    	function excluirUsuario(){
+    		if(confirm("Deseja realmente deletar os dados ??")){
+    			
+    			var urlAction = document.getElementById('formulario').action;
+    			var idUser = document.getElementById('id').value;
+    			
+    			$.ajax({
+    				
+    				 method: "get",
+    			     url : urlAction,
+    			     data : "id=" + idUser + '&acao=deletar',
+    			     success: function (response) {
+    				 
+    				  limparForm();
+    				  document.getElementById('msg').textContent = response;
+    			     }
+    			     
+    				
+    			}).fail(function(xhr, status, errorThrown){
+    				
+    				alert('Erro ao deletar usuário por id: ' + xhr.responseText);
+    				
+    			})
+    			
+    		}
+    	}
+    	
     </script>
     
     <!-- JavaScript page -->
