@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import connect.SingleConnection;
 import model.Login;
@@ -92,7 +94,32 @@ public class DAOUsuarioRepository {
 		return u;
 	}
 	
-	
+	// GET BUSCA USUARIOS
+		public List<Login> getUsuariosBusca(String login) throws Exception {
+			
+			String sql = "SELECT * FROM usuario WHERE nome LIKE ? ";
+			PreparedStatement prepara = conexao.prepareStatement(sql);
+			prepara.setString(1, "%"+login+"%");
+			
+			ResultSet result = prepara.executeQuery();
+			
+			List<Login> usuarios = new ArrayList<Login>();
+			Login u = new Login();
+			
+			while(result.next()) {
+				u.setId(result.getLong("id"));
+				u.setEmail(result.getString("email"));
+				u.setNome(result.getString("nome"));
+				u.setLogin(result.getString("login"));
+				u.setSenha(result.getString("senha"));
+				
+				usuarios.add(u);
+			}
+			
+			conexao.commit();
+			
+			return usuarios;
+		}
 	
 	
 	

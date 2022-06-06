@@ -83,7 +83,10 @@
                                                             <button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm()">Novo</button>
                                                             <button type="submit" class="btn btn-success waves-effect waves-light">Salvar</button>
                                                             <button type="button" class="btn btn-danger waves-effect waves-light" onclick="excluirUsuario()">Excluir</button>
-                                                            
+                                                            <!-- Button trigger modal -->
+															<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#pesquisarUsuario">
+															  Pesquisar Usuario
+															</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -105,7 +108,85 @@
     </div>
     
     
+	    	<!-- Modal -->
+			<div class="modal fade" id="pesquisarUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Pesquisar Usuario</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body"><!-- Corpo -->
+			        
+						<div class="input-group mb-3">
+						  <input id="buscaNome" type="text" class="form-control" placeholder="Pesquisar nome" aria-label="Recipient's username" aria-describedby="basic-addon2">
+						  <div class="input-group-append">
+						    <button onclick="bucarUsuario()" class="btn btn-success" type="button" >Enviar</button>
+						  </div>
+						</div>
+						
+						
+							<table class="table">
+							  <thead>
+							    <tr>
+							      <th scope="col">ID</th>
+							      <th scope="col">Nome</th>
+							      <th scope="col">Ver</th>
+							      
+							    </tr>
+							  </thead>
+							  <tbody>
+							     
+							  </tbody>
+							</table>
+						
+						
+
+			      </div>
+			      <div class="modal-footer"><!-- fim corpo -->
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">fechar</button>
+			        
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+
+    
+    
     <script type="text/javascript">
+    
+    	function bucarUsuario(){
+    		
+    		var buscaNome = document.getElementById("buscaNome").value;
+    		
+    		if(buscaNome != null && buscaNome != "" && buscaNome.trim() != ""){
+    			
+    			var urlAction = document.getElementById('formulario').action;
+    			
+    			$.ajax({
+    				
+   				 method: "get",
+   			     url : urlAction,
+   			     data : "buscarNome=" + buscaNome + '&acao=buscarUsuario',
+   			     success: function (response) {
+   				 
+   				  
+   				  document.getElementById('msg').textContent = response;
+   				  
+   			     }
+   			     
+   				
+    			
+   			}).fail(function(xhr, status, errorThrown){
+   				
+   				alert('Erro ao Buscar usuário ' + xhr.responseText);
+   				
+   			})
+    		}
+    	}
     
     	function limparForm() {
     		var elementos = document.getElementById("formulario").elements; /*Retorna os elementos html dentro do form*/

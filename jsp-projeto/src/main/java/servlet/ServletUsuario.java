@@ -2,6 +2,8 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,13 +21,17 @@ public class ServletUsuario extends HttpServlet {
   
 	DAOUsuarioRepository usuarioDao = new DAOUsuarioRepository();
 	
+	// CONTRUTOR
     public ServletUsuario() {
     }
-
+    
+    // GET
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		
 		String acao = request.getParameter("acao");
 		
+		// DELETAR
 		if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("deletar")) {
 			String id = request.getParameter("id");
 			
@@ -40,12 +46,36 @@ public class ServletUsuario extends HttpServlet {
 				e.printStackTrace();
 				
 			}
+		
+		
+		// BUSCAR USUARIO
+		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("buscarUsuario")) {
+			
+			
+			String buscarNome = request.getParameter("buscarNome");
+			System.out.println(buscarNome);
+			
+			Login u = new Login();
+			List<Login> usuarios = new ArrayList<Login>();
+		
+			try {
+				usuarios = usuarioDao.getUsuariosBusca(buscarNome);
+				  
+				response.getWriter().write("");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+		}else {
+			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 		}
 		
 		
 		
 	}
-
+	
+	// POST
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String id = request.getParameter("id");
