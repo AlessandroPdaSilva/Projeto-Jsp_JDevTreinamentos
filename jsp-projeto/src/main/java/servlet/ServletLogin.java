@@ -73,7 +73,7 @@ public class ServletLogin extends HttpServlet {
 							 }else {
 								 // ERRO LOGIN OU SENHA
 								 RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
-								 request.setAttribute("msgErro", "Login ou senha esta incorreto");
+								 request.setAttribute("msg", "Login ou senha esta incorreto");
 								 redirecionar.forward(request, response);
 							 }
 					 
@@ -83,7 +83,7 @@ public class ServletLogin extends HttpServlet {
 					 
 					 // redirecionando para pagina de erro
 					 RequestDispatcher redirecionar = request.getRequestDispatcher("/erro.jsp");
-					 request.setAttribute("msgErro", e.getMessage());
+					 request.setAttribute("msg", e.getMessage());
 					 redirecionar.forward(request, response);
 					 
 				 }
@@ -93,7 +93,7 @@ public class ServletLogin extends HttpServlet {
 		 }else {
 			 // ERRO VAZIO
 			 RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
-			 request.setAttribute("msgErro", "Login ou senha esta vazio");
+			 request.setAttribute("msg", "Login ou senha esta vazio");
 			 redirecionar.forward(request, response);
 		 }
 		

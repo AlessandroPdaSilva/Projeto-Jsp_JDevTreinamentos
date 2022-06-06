@@ -48,7 +48,7 @@
                                                     </div>
                                                     <div class="card-block">
                                                     	  
-                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" class="form-material" >
+                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" class="form-material" id="formulario">
                                                         	<div class="form-group form-default form-static-label">
                                                                 <input value="${usuario.id}" type="text" name="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
                                                                 <span class="form-bar"></span>
@@ -80,7 +80,7 @@
                                                             </div>
                                                             
                                                              
-                                                            <button class="btn btn-primary waves-effect waves-light">Novo</button>
+                                                            <button class="btn btn-primary waves-effect waves-light" onclick="limparForm()">Novo</button>
                                                             <button class="btn btn-success waves-effect waves-light">Salvar</button>
                                                             <button class="btn btn-danger waves-effect waves-light">Excluir</button>
                                                             
@@ -88,7 +88,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <span>${msgErro}</span>
+                                                <span>${msg}</span>
                                             
                                             
                                             
@@ -104,6 +104,17 @@
         </div>
     </div>
     
+    
+    <script type="text/javascript">
+    
+    	function limparForm() {
+    		var elementos = document.getElementById("formulario").elements; /*Retorna os elementos html dentro do form*/
+    	    
+    	    for (p = 0; p < elementos.length; p ++){
+    		    elementos[p].value = '';
+    	    }
+		}
+    </script>
     
     <!-- JavaScript page -->
     <jsp:include page="jspage.jsp"></jsp:include>

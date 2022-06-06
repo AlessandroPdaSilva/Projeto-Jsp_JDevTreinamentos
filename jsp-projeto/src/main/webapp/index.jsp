@@ -74,7 +74,7 @@
 		</form>
 		<br>
 		
-		<div class="msg">${msgErro}</div>
+		<div class="msg">${msg}</div>
 		
 		
 	</div>

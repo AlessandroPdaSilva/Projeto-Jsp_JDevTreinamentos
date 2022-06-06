@@ -28,40 +28,61 @@ public class ServletUsuario extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String id = request.getParameter("id");
+		String email = request.getParameter("email");
+		String nome = request.getParameter("nome");
+		String login = request.getParameter("login");
+		String senha= request.getParameter("senha");
+		
+		Login log = new Login();
+		log.setId( id != null && !id.isEmpty() ? Long.parseLong(id) : null);
+		log.setNome(nome);
+		log.setEmail(email);
+		log.setLogin(login);
+		log.setSenha(senha);
+		
+		
 		try {
 			
-			String id = request.getParameter("id");
-			String email = request.getParameter("email");
-			String nome = request.getParameter("nome");
-			String login = request.getParameter("login");
-			String senha= request.getParameter("senha");
+			// SALVAR
+			log = usuarioDao.salvarUsuario(log);
 			
-			Login log = new Login();
-			log.setId( id != null && !id.isEmpty() ? Long.parseLong(id) : null);
-			log.setNome(nome);
-			log.setEmail(email);
-			log.setLogin(login);
-			log.setSenha(senha);
-			
-			usuarioDao.salvarUsuario(log);
-			request.setAttribute("msgErro", "Salvo com Sucesso!!");
-			 
-			
+			request.setAttribute("msg", "Salvo com Sucesso!!");
 			request.setAttribute("usuario", log);
+			
 			RequestDispatcher pagina = request.getRequestDispatcher("principal/usuario.jsp");
 			
 			pagina.forward(request, response);
 			
 			
 			
-		}catch(SQLIntegrityConstraintViolationException e1){
-			e1.printStackTrace();
-			request.setAttribute("msgErro", "Login ja Existe, por favor crie outro usuario ");
-			RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
-			redirecionar.forward(request, response); 
-		}catch (Exception e) {
+		}catch(SQLIntegrityConstraintViolationException e1){// --usuario ja existe
+			
+				// EDITAR
+				try {
+					
+					log = usuarioDao.editarUsuario(log);
+					
+					request.setAttribute("usuario", log);
+					request.setAttribute("msg", "Editado com sucesso !! ");
+					RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+					redirecionar.forward(request, response); 
+					
+				} catch (Exception e2) {// erro editar
+					
+					e2.printStackTrace();
+					request.setAttribute("msg", "Erro ao editar !!");
+					RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+					redirecionar.forward(request, response); 
+				}
+			
+			//e1.printStackTrace();
+			
+			
+			
+		}catch (Exception e) {// erro salvar
 			e.printStackTrace();
-			request.setAttribute("msgErro", "Erro ao Salvar: "+e.getMessage());
+			request.setAttribute("msg", "Erro ao Salvar: "+e.getMessage());
 			RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
 			redirecionar.forward(request, response); 
 		} 

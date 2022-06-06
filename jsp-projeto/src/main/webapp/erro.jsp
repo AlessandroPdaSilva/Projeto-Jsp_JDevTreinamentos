@@ -18,7 +18,7 @@
 	<h1> Ocorreu um erro</h1>
 	<p> Fale com o suporte </p>
  
- 	<span>${msgErro}</span>
+ 	<span>${msg}</span>
  
  	<!--Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

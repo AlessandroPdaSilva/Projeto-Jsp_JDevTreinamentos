@@ -49,7 +49,7 @@ public class filterAutenticacao implements Filter {
 			if(usuario == null || usuario.isEmpty()) {// usuario nao existe
 				
 				RequestDispatcher redireciona = req.getRequestDispatcher("/index.jsp");
-				req.setAttribute("msgErro", "Por favor fassa o login (filter te pegou)");
+				req.setAttribute("msg", "Por favor fassa o login (filter te pegou)");
 				redireciona.forward(request, response);
 				return;
 			}else {
@@ -71,7 +71,7 @@ public class filterAutenticacao implements Filter {
 			e.printStackTrace();
 			 
 			 // redirecionando para pagina de erro
-			 request.setAttribute("msgErro", e.getMessage());
+			 request.setAttribute("msg", e.getMessage());
 			 RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
 			 redirecionar.forward(request, response); 
 			
