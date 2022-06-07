@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import dao.DAOUsuarioRepository;
 import model.Login;
 
@@ -53,18 +55,21 @@ public class ServletUsuario extends HttpServlet {
 			
 			
 			String buscarNome = request.getParameter("buscarNome");
-			System.out.println(buscarNome);
 			
-			Login u = new Login();
-			List<Login> usuarios = new ArrayList<Login>();
-		
 			try {
-				usuarios = usuarioDao.getUsuariosBusca(buscarNome);
-				  
-				response.getWriter().write("");
+				
+				List<Login> usuarios = usuarioDao.getUsuariosBusca(buscarNome);
+				
+				ObjectMapper mapper = new ObjectMapper();
+				
+				String json = mapper.writeValueAsString(usuarios);
+				
+				response.getWriter().write(json);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		 
 			
 			
 		}else {

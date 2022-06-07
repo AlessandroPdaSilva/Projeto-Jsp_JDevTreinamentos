@@ -173,8 +173,7 @@
    			     data : "buscarNome=" + buscaNome + '&acao=buscarUsuario',
    			     success: function (response) {
    				 
-   				  
-   				  document.getElementById('msg').textContent = response;
+   				  alert(response);
    				  
    			     }
    			     
