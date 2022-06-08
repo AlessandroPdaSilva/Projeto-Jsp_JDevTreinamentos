@@ -97,16 +97,18 @@ public class DAOUsuarioRepository {
 	// GET BUSCA USUARIOS
 		public List<Login> getUsuariosBusca(String login) throws Exception {
 			
-			String sql = "SELECT * FROM usuario WHERE nome LIKE ? ";
+			String sql = "SELECT * FROM usuario WHERE nome LIKE \"%"+login+"%\"";
 			PreparedStatement prepara = conexao.prepareStatement(sql);
-			prepara.setString(1, "%"+login+"%");
 			
 			ResultSet result = prepara.executeQuery();
 			
+			
 			List<Login> usuarios = new ArrayList<Login>();
-			Login u = new Login();
+			
 			
 			while(result.next()) {
+				
+				Login u = new Login();
 				u.setId(result.getLong("id"));
 				u.setEmail(result.getString("email"));
 				u.setNome(result.getString("nome"));
@@ -116,8 +118,7 @@ public class DAOUsuarioRepository {
 				usuarios.add(u);
 			}
 			
-			conexao.commit();
-			
+			 
 			return usuarios;
 		}
 	

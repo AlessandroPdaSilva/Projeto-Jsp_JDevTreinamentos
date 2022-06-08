@@ -127,8 +127,8 @@
 						  </div>
 						</div>
 						
-						
-							<table class="table">
+							<div style="height: 300px; overflow: scroll;">
+							<table class="table" id="tabelapesquisa">
 							  <thead>
 							    <tr>
 							      <th scope="col">ID</th>
@@ -141,10 +141,14 @@
 							     
 							  </tbody>
 							</table>
-						
+							</div>
 						
 
 			      </div>
+			      
+			      <span id="totalresultados"> </span>
+			      
+			      
 			      <div class="modal-footer"><!-- fim corpo -->
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal">fechar</button>
 			        
@@ -157,7 +161,17 @@
     
     
     <script type="text/javascript">
+    		
+	 	// VER EDITAR
+		function verEditar(id){
+			var urlAction = document.getElementById('formulario').action;
+			
+			window.location.href = urlAction + "?acao=verEditar&id=" + id;
+			
+			alert(urlAction + "?acao=verEditar&id=" + id)
+		}
     
+    	// BUSCAR USUARIO
     	function bucarUsuario(){
     		
     		var buscaNome = document.getElementById("buscaNome").value;
@@ -173,8 +187,19 @@
    			     data : "buscarNome=" + buscaNome + '&acao=buscarUsuario',
    			     success: function (response) {
    				 
-   				  alert(response);
-   				  
+   			    	  var json = JSON.parse(response); 
+   			     
+   			    	
+   			    	  $('#tabelapesquisa > tbody > tr').remove();
+   				 
+		   			  for(var p = 0; p < json.length; p++){
+		   			      $('#tabelapesquisa > tbody').append('<tr> <td>'+json[p].id+'</td> <td> '+json[p].nome+'</td> <td><button onclick="verEditar('+ json[p].id +')" type="button" class="btn btn-info">Ver</button></td></tr>');
+		   			  		
+		   			  }
+   			  
+		   			document.getElementById("totalresultados").textContent = "Resultados: " + json.length;
+   				  	
+		   			//alert(response)
    			     }
    			     
    				
@@ -186,7 +211,9 @@
    			})
     		}
     	}
+    	
     
+    	// LIMPAR FORM
     	function limparForm() {
     		var elementos = document.getElementById("formulario").elements; /*Retorna os elementos html dentro do form*/
     	    
@@ -195,6 +222,7 @@
     	    }
 		}
     	
+    	// EXCLUIR USUARIO
     	function excluirUsuario(){
     		if(confirm("Deseja realmente deletar os dados ??")){
     			

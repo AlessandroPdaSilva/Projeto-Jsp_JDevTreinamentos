@@ -62,7 +62,7 @@ public class ServletUsuario extends HttpServlet {
 				
 				ObjectMapper mapper = new ObjectMapper();
 				
-				String json = mapper.writeValueAsString(usuarios);
+ 				String json = mapper.writeValueAsString(usuarios);
 				
 				response.getWriter().write(json);
 				
@@ -72,7 +72,11 @@ public class ServletUsuario extends HttpServlet {
 		 
 			
 			
-		}else {
+		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("verEditar")){
+			
+			 
+			
+		}else{
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 		}
 		
