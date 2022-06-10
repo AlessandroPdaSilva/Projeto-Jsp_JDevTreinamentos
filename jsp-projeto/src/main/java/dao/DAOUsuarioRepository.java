@@ -95,9 +95,37 @@ public class DAOUsuarioRepository {
 	}
 	
 	// GET BUSCA USUARIOS
-		public List<Login> getUsuariosBusca(String login) throws Exception {
+	public List<Login> getUsuariosBusca(String login) throws Exception {
+		
+		String sql = "SELECT * FROM usuario WHERE nome LIKE \"%"+login+"%\"";
+		PreparedStatement prepara = conexao.prepareStatement(sql);
+		
+		ResultSet result = prepara.executeQuery();
+		
+		
+		List<Login> usuarios = new ArrayList<Login>();
+		
+		
+		while(result.next()) {
 			
-			String sql = "SELECT * FROM usuario WHERE nome LIKE \"%"+login+"%\"";
+			Login u = new Login();
+			u.setId(result.getLong("id"));
+			u.setEmail(result.getString("email"));
+			u.setNome(result.getString("nome"));
+			u.setLogin(result.getString("login"));
+			u.setSenha(result.getString("senha"));
+			
+			usuarios.add(u);
+		}
+		
+		 
+		return usuarios;
+	}
+	
+	// GET BUSCA USUARIOS
+		public List<Login> getUsuarios() throws Exception {
+			
+			String sql = "SELECT * FROM usuario";
 			PreparedStatement prepara = conexao.prepareStatement(sql);
 			
 			ResultSet result = prepara.executeQuery();
@@ -121,9 +149,32 @@ public class DAOUsuarioRepository {
 			 
 			return usuarios;
 		}
+		
 	
-	
-	
+	// GET USUARIO BY ID
+	public Login getUsuarioById(String id) throws Exception {
+		
+		String sql = "SELECT * FROM usuario WHERE id = ?";
+		PreparedStatement prepara = conexao.prepareStatement(sql);
+		prepara.setLong(1, Long.parseLong(id));
+		
+		ResultSet result = prepara.executeQuery();
+		
+		Login u = new Login();
+		
+		while(result.next()) {
+			u.setId(result.getLong("id"));
+			u.setEmail(result.getString("email"));
+			u.setNome(result.getString("nome"));
+			u.setLogin(result.getString("login"));
+			u.setSenha(result.getString("senha"));
+		}
+		
+		conexao.commit();
+		
+		return u;
+	}
+		
 	
 	 
 	

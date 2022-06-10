@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.DAOUsuarioRepository;
 import model.Login;
 
-@WebServlet("/ServletUsuario")
+@WebServlet(urlPatterns =  {"/ServletUsuario"})
 public class ServletUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
   
@@ -32,6 +32,7 @@ public class ServletUsuario extends HttpServlet {
 		
 		
 		String acao = request.getParameter("acao");
+		String tabelaUsuario = request.getParameter("tabelaUsuario");
 		
 		// DELETAR
 		if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("deletar")) {
@@ -42,7 +43,7 @@ public class ServletUsuario extends HttpServlet {
 				usuarioDao.deletarUsuario(Long.parseLong(id));
 				response.getWriter().write("Deletado com sucesso!!");
 				
-			} catch (Exception e) {// erro deletar
+			} catch (Exception e) {// erro
 				
 				response.getWriter().write("Erro ao deletar!!");
 				e.printStackTrace();
@@ -66,15 +67,42 @@ public class ServletUsuario extends HttpServlet {
 				
 				response.getWriter().write(json);
 				
-			} catch (Exception e) {
+			} catch (Exception e) {//erro
 				e.printStackTrace();
 			}
 		 
 			
-			
+		// VER EDITAR
 		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("verEditar")){
 			
+			String id = request.getParameter("id");
 			 
+			try {
+				Login log = usuarioDao.getUsuarioById(id);
+				
+				request.setAttribute("usuario", log);
+				request.setAttribute("msg", "Usuario em edição !! ");
+				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+				redirecionar.forward(request, response); 
+				
+			} catch (Exception e) {//erro
+				e.printStackTrace();
+			}
+			
+		// LISTAR USUARIO
+		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("listarUsuario")){
+			
+			try {
+				
+				List<Login> listaUsu = usuarioDao.getUsuarios();
+				
+				request.setAttribute("listaUsuario", listaUsu);
+				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+				redirecionar.forward(request, response);
+				
+			} catch (Exception e) {//erro
+				e.printStackTrace();
+			}
 			
 		}else{
 			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);

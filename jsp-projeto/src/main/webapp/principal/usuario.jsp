@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -48,6 +50,7 @@
                                                     </div>
                                                     <div class="card-block">
                                                     	  
+                                                    	 <!-- FORMULARIO -->
                                                         <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" class="form-material" id="formulario">
                                                         	<div class="form-group form-default form-static-label">
                                                                 <input value="${usuario.id}" type="text" name="id" id="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
@@ -91,9 +94,33 @@
                                                     </div>
                                                 </div>
                                                 
+                                                <!-- MENSAGEM -->
                                                 <span id="msg">${msg}</span>
                                             
-                                            
+                                            		<!-- TABELA -->
+	                                            	<div style="height: 300px; overflow: scroll;">
+													<table class="table" id="tabelausuarios">
+													  <thead>
+													    <tr>
+													      <th scope="col">ID</th>
+													      <th scope="col">Nome</th>
+													      <th scope="col">Ver</th>
+													      
+													    </tr>
+													  </thead>
+													  <tbody>
+													     <c:forEach items="${listaUsuario}" var="u">
+													     	<tr>
+													     		<td><c:out value="${u.id}"></c:out></td>
+													     		<td><c:out value="${u.nome}"></c:out></td>
+													     		<td><a href="<%= request.getContextPath() %>/ServletUsuario?acao=verEditar&id=${u.id}" class="btn btn-success" >Ver</a></td>
+													     	</tr>
+													     	
+													     </c:forEach>
+													     
+													  </tbody>
+													</table>
+													</div>
                                             
                                             
                                     </div><!-- FIM BODY -->
@@ -108,7 +135,7 @@
     </div>
     
     
-	    	<!-- Modal -->
+	    	<!-- MODAL PEQUISA -->
 			<div class="modal fade" id="pesquisarUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			  <div class="modal-dialog" role="document">
 			    <div class="modal-content">
@@ -160,15 +187,16 @@
 
     
     
+    <!-- JAVASCRIPT -->
     <script type="text/javascript">
     		
 	 	// VER EDITAR
 		function verEditar(id){
+	 		
 			var urlAction = document.getElementById('formulario').action;
 			
 			window.location.href = urlAction + "?acao=verEditar&id=" + id;
 			
-			alert(urlAction + "?acao=verEditar&id=" + id)
 		}
     
     	// BUSCAR USUARIO
@@ -199,7 +227,7 @@
    			  
 		   			document.getElementById("totalresultados").textContent = "Resultados: " + json.length;
    				  	
-		   			//alert(response)
+		   			
    			     }
    			     
    				
