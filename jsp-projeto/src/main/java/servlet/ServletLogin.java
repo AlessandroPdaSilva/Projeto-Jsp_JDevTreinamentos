@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.mysql.cj.Session;
 
 import dao.DAOLoginRepository;
+import dao.DAOUsuarioRepository;
 import model.Login;
 
 @WebServlet(urlPatterns = {"/principal/ServletLogin","/ServletLogin"})
@@ -19,6 +20,7 @@ public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	DAOLoginRepository loginDao = new DAOLoginRepository();
+	DAOUsuarioRepository usuDao = new DAOUsuarioRepository();
 	
 	//CONTRUTOR
     public ServletLogin() {
@@ -61,9 +63,12 @@ public class ServletLogin extends HttpServlet {
 							 
 							 
 							 if(loginDao.autenticaLogin(log)) {//validacao usuario
-							 
+								 
+								 log = usuDao.getUsuarioByLogin(login);
+								 
 								 // sessao
-								 request.getSession().setAttribute("login", log.getLogin());
+								 request.getSession().setAttribute("login", log);
+								  
 							 
 								 // pagina principal
 								 RequestDispatcher r = request.getRequestDispatcher("/principal/principal.jsp");

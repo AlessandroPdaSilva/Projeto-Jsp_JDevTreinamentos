@@ -32,7 +32,6 @@ public class ServletUsuario extends HttpServlet {
 		
 		
 		String acao = request.getParameter("acao");
-		String tabelaUsuario = request.getParameter("tabelaUsuario");
 		
 		// DELETAR
 		if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("deletar")) {
@@ -40,6 +39,10 @@ public class ServletUsuario extends HttpServlet {
 			
 			try {
 				// DELETAR
+				//
+				List<Login> listaUsu = usuarioDao.getUsuarios();
+				request.setAttribute("listaUsuario", listaUsu);
+				
 				usuarioDao.deletarUsuario(Long.parseLong(id));
 				response.getWriter().write("Deletado com sucesso!!");
 				
@@ -58,6 +61,9 @@ public class ServletUsuario extends HttpServlet {
 			String buscarNome = request.getParameter("buscarNome");
 			
 			try {
+				//
+				List<Login> listaUsu = usuarioDao.getUsuarios();
+				request.setAttribute("listaUsuario", listaUsu);
 				
 				List<Login> usuarios = usuarioDao.getUsuariosBusca(buscarNome);
 				
@@ -79,6 +85,9 @@ public class ServletUsuario extends HttpServlet {
 			 
 			try {
 				Login log = usuarioDao.getUsuarioById(id);
+				//
+				List<Login> listaUsu = usuarioDao.getUsuarios();
+				request.setAttribute("listaUsuario", listaUsu);
 				
 				request.setAttribute("usuario", log);
 				request.setAttribute("msg", "Usuario em edição !! ");
@@ -93,7 +102,7 @@ public class ServletUsuario extends HttpServlet {
 		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("listarUsuario")){
 			
 			try {
-				
+				//
 				List<Login> listaUsu = usuarioDao.getUsuarios();
 				
 				request.setAttribute("listaUsuario", listaUsu);
@@ -120,6 +129,7 @@ public class ServletUsuario extends HttpServlet {
 		String nome = request.getParameter("nome");
 		String login = request.getParameter("login");
 		String senha= request.getParameter("senha");
+		String perfil = request.getParameter("perfil");
 		
 		Login log = new Login();
 		log.setId( id != null && !id.isEmpty() ? Long.parseLong(id) : null);
@@ -127,6 +137,7 @@ public class ServletUsuario extends HttpServlet {
 		log.setEmail(email);
 		log.setLogin(login);
 		log.setSenha(senha);
+		log.setPerfil(perfil != null && !perfil.isEmpty() ? perfil : null);
 		
 		
 		try {

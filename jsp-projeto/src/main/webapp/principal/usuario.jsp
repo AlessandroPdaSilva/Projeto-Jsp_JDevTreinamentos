@@ -70,6 +70,19 @@
                                                                 <label class="float-label">Email</label>
                                                             </div>
                                                             
+                                                            
+                                                            
+                                                             <c:if test="${login.perfil == 'ADMINISTRADOR'}">
+	                                                            <div class="form-group form-default">
+		                                                            <select name="perfil" class="form-control" aria-label="Default select example" required="required">
+																	  <option <c:if test="${usuario.perfil == null}"> selected="selected" </c:if> disabled="disabled">Selecione um perfil</option>
+																	  <option value="ADMINISTRADOR" <c:if test="${usuario.perfil == 'ADMINISTRADOR'}"> selected="selected" </c:if>>Administrador</option>
+																	  <option value="SECRETARIO" <c:if test="${usuario.perfil == 'SECRETARIO'}"> selected="selected" </c:if>>Secretario</option>
+																	  <option value="USUARIO" <c:if test="${usuario.perfil == 'USUARIO'}"> selected="selected" </c:if> >Usuario</option>
+																	</select>
+	                                                            </div>
+                                                             </c:if>
+                                                            	
                                                             <div class="form-group form-default">
                                                                 <input value="${usuario.login}" type="text" name="login" class="form-control" required="">
                                                                 <span class="form-bar"></span>
@@ -93,6 +106,7 @@
                                                         </form>
                                                     </div>
                                                 </div>
+                                                
                                                 
                                                 <!-- MENSAGEM -->
                                                 <span id="msg">${msg}</span>
