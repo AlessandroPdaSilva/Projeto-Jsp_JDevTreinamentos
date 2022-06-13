@@ -51,7 +51,7 @@
                                                     <div class="card-block">
                                                     	  
                                                     	 <!-- FORMULARIO -->
-                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" class="form-material" id="formulario">
+                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" enctype="multpart/form-data" class="form-material" id="formulario">
                                                         	<div class="form-group form-default form-static-label">
                                                                 <input value="${usuario.id}" type="text" name="id" id="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
                                                                 <span class="form-bar"></span>
@@ -82,7 +82,9 @@
 																	</select>
 	                                                            </div>
                                                              </c:if>
-                                                            	
+                                                             
+                                                              
+															                                                            	
                                                             <div class="form-group form-default">
                                                                 <input value="${usuario.login}" type="text" name="login" class="form-control" required="">
                                                                 <span class="form-bar"></span>
@@ -94,6 +96,12 @@
                                                                 <span class="form-bar"></span>
                                                                 <label class="float-label">Senha</label>
                                                             </div>
+                                                            
+                                                              <div class="form-group">
+															    <label for="exampleFormControlFile1">Imagem de perfil</label><br>
+															    <img src="" id="fotonome" width="70px">
+															    <input type="file" id="filefoto" accept="image/*" onchange="visualizarImg('fotonome','filefoto')" class="form-control-file" id="exampleFormControlFile1" style="margin-top: 15px;">
+															  </div>
                                                             
                                                              
                                                             <button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm()">Novo</button>
