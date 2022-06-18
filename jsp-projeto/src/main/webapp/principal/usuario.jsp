@@ -176,9 +176,26 @@
 													     
 													  </tbody>
 													</table>
+													
 													</div>
-                                            
-                                            
+															
+		                                            <nav aria-label="Page navigation example">
+													  <ul class="pagination">
+													    
+													    <%
+													    	int totalPagina = (int) request.getAttribute("totalPagina");	
+													    
+													    	for(int i = 0; i < totalPagina; i++){
+													    		String url = request.getContextPath()+ "/ServletUsuario?acao=paginacao&offset="+(i*5);
+													    		out.print("<li class=\"page-item\"><a class=\"page-link\" href=\""+ url+"\"> "+ (i+1) +"</a></li>");
+													    	}
+													    %>
+													    
+													    
+													  </ul>
+													</nav>	
+		                                            
+		                                            
                                     </div><!-- FIM BODY -->
                                 </div>
                                 <div id="styleSelector"> </div>

@@ -182,46 +182,6 @@ public class DAOUsuarioRepository {
 		return usuarios;
 	}
 	
-	
-	// GET BUSCA USUARIOS
-	public List<Login> getUsuarios() throws Exception {
-			
-			String sql = "SELECT * FROM usuario WHERE useradm = 0";
-			PreparedStatement prepara = conexao.prepareStatement(sql);
-			
-			ResultSet result = prepara.executeQuery();
-			
-			
-			List<Login> usuarios = new ArrayList<Login>();
-			
-			
-			while(result.next()) {
-				
-				Login u = new Login();
-				u.setId(result.getLong("id"));
-				u.setEmail(result.getString("email"));
-				u.setNome(result.getString("nome"));
-				u.setLogin(result.getString("login"));
-				u.setSenha(result.getString("senha"));
-				u.setPerfil(result.getString("perfil"));
-				u.setExtensaoFoto(result.getString("extensaoFoto"));
-				u.setFotoBase64(result.getString("fotoBase64"));
-				
-				u.setCep(result.getString("cep"));
-				u.setLogradouro(result.getString("logradouro"));
-				u.setBairro(result.getString("bairro"));
-				u.setLocalidade(result.getString("localidade"));
-				u.setUf(result.getString("uf"));
-				
-				usuarios.add(u);
-			}
-			
-			 
-			return usuarios;
-		}
-	
-		
-	
 	// GET USUARIO BY ID
 	public Login getUsuarioById(String id) throws Exception {
 		
@@ -255,8 +215,107 @@ public class DAOUsuarioRepository {
 		
 		return u;
 	}
-		
 	
+	
+	
+	
+	// GET BUSCA USUARIOS
+	public List<Login> getUsuarios() throws Exception {
+			
+			String sql = "SELECT * FROM usuario WHERE useradm = 0 LIMIT 5";
+			PreparedStatement prepara = conexao.prepareStatement(sql);
+			
+			ResultSet result = prepara.executeQuery();
+			
+			
+			List<Login> usuarios = new ArrayList<Login>();
+			
+			
+			while(result.next()) {
+				
+				Login u = new Login();
+				u.setId(result.getLong("id"));
+				u.setEmail(result.getString("email"));
+				u.setNome(result.getString("nome"));
+				u.setLogin(result.getString("login"));
+				u.setSenha(result.getString("senha"));
+				u.setPerfil(result.getString("perfil"));
+				u.setExtensaoFoto(result.getString("extensaoFoto"));
+				u.setFotoBase64(result.getString("fotoBase64"));
+				
+				u.setCep(result.getString("cep"));
+				u.setLogradouro(result.getString("logradouro"));
+				u.setBairro(result.getString("bairro"));
+				u.setLocalidade(result.getString("localidade"));
+				u.setUf(result.getString("uf"));
+				
+				usuarios.add(u);
+			}
+			
+			 
+			return usuarios;
+		}
+	
+	// GET BUSCA USUARIOS PAGINACAO
+	public List<Login> getUsuariosPaginacao(int offset) throws Exception {
+			
+			String sql = "SELECT * FROM usuario WHERE useradm = 0 ORDER BY nome LIMIT 5 OFFSET "+offset;
+			PreparedStatement prepara = conexao.prepareStatement(sql);
+			
+			ResultSet result = prepara.executeQuery();
+			
+			
+			List<Login> usuarios = new ArrayList<Login>();
+			
+			
+			while(result.next()) {
+				
+				Login u = new Login();
+				u.setId(result.getLong("id"));
+				u.setEmail(result.getString("email"));
+				u.setNome(result.getString("nome"));
+				u.setLogin(result.getString("login"));
+				u.setSenha(result.getString("senha"));
+				u.setPerfil(result.getString("perfil"));
+				u.setExtensaoFoto(result.getString("extensaoFoto"));
+				u.setFotoBase64(result.getString("fotoBase64"));
+				
+				u.setCep(result.getString("cep"));
+				u.setLogradouro(result.getString("logradouro"));
+				u.setBairro(result.getString("bairro"));
+				u.setLocalidade(result.getString("localidade"));
+				u.setUf(result.getString("uf"));
+				
+				usuarios.add(u);
+			}
+			
+			 
+			return usuarios;
+		}
+	
+	
+		
+	// TOTAL DE PAGINA
+	public int totalPagina() throws SQLException {
+		
+		String sql = "SELECT COUNT(id) AS total FROM usuario WHERE useradm = 0";
+		PreparedStatement prepara = conexao.prepareStatement(sql);
+		ResultSet result = prepara.executeQuery();
+		
+		result.next();
+		
+		Double resultado = result.getDouble("total");
+		Double limit = 5.0;
+		
+		Double pagina = resultado / limit;
+		Double resto = pagina % 2;
+		
+		if(resto > 0) {
+			pagina++;
+		}
+		
+		return pagina.intValue();
+	}
 	 
 	
 	

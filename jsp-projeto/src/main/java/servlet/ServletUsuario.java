@@ -49,6 +49,7 @@ public class ServletUsuario extends HttpServlet {
 				//
 				List<Login> listaUsu = usuarioDao.getUsuarios();
 				request.setAttribute("listaUsuario", listaUsu);
+				request.setAttribute("totalPagina", usuarioDao.totalPagina());
 				
 				usuarioDao.deletarUsuario(Long.parseLong(id));
 				response.getWriter().write("Deletado com sucesso!!");
@@ -71,6 +72,7 @@ public class ServletUsuario extends HttpServlet {
 				//
 				List<Login> listaUsu = usuarioDao.getUsuarios();
 				request.setAttribute("listaUsuario", listaUsu);
+				request.setAttribute("totalPagina", usuarioDao.totalPagina());
 				
 				List<Login> usuarios = usuarioDao.getUsuariosBusca(buscarNome);
 				
@@ -95,6 +97,7 @@ public class ServletUsuario extends HttpServlet {
 				//
 				List<Login> listaUsu = usuarioDao.getUsuarios();
 				request.setAttribute("listaUsuario", listaUsu);
+				request.setAttribute("totalPagina", usuarioDao.totalPagina());
 				
 				request.setAttribute("usuario", log);
 				request.setAttribute("msg", "Usuario em edição !! ");
@@ -111,12 +114,29 @@ public class ServletUsuario extends HttpServlet {
 			try {
 				//
 				List<Login> listaUsu = usuarioDao.getUsuarios();
-				
 				request.setAttribute("listaUsuario", listaUsu);
+				request.setAttribute("totalPagina", usuarioDao.totalPagina());
+				
 				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
 				redirecionar.forward(request, response);
 				
 			} catch (Exception e) {//erro
+				e.printStackTrace();
+			}
+			
+		// PAGINACAO TABELA	
+		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("paginacao")){
+			Integer offset = Integer.parseInt(request.getParameter("offset")) ;
+			
+			try {
+				List<Login> listaUsu = usuarioDao.getUsuariosPaginacao(offset);
+				request.setAttribute("listaUsuario", listaUsu);
+				request.setAttribute("totalPagina", usuarioDao.totalPagina());
+				
+				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+				redirecionar.forward(request, response);
+				
+			} catch (Exception e) {// erro paginacao
 				e.printStackTrace();
 			}
 			
@@ -188,6 +208,7 @@ public class ServletUsuario extends HttpServlet {
 			//
 			List<Login> listaUsu = usuarioDao.getUsuarios();
 			request.setAttribute("listaUsuario", listaUsu);
+			request.setAttribute("totalPagina", usuarioDao.totalPagina());
 			
 			RequestDispatcher pagina = request.getRequestDispatcher("principal/usuario.jsp");
 			
@@ -208,6 +229,7 @@ public class ServletUsuario extends HttpServlet {
 					//
 					List<Login> listaUsu = usuarioDao.getUsuarios();
 					request.setAttribute("listaUsuario", listaUsu);
+					request.setAttribute("totalPagina", usuarioDao.totalPagina());
 					
 					RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
 					redirecionar.forward(request, response); 
