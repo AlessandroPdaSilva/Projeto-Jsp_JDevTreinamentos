@@ -51,7 +51,7 @@
                                                     <div class="card-block">
                                                     	  
                                                     	 <!-- FORMULARIO -->
-                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" enctype="multpart/form-data" class="form-material" id="formulario">
+                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" enctype="multipart/form-data" class="form-material" id="formulario">
                                                         	<div class="form-group form-default form-static-label">
                                                                 <input value="${usuario.id}" type="text" name="id" id="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
                                                                 <span class="form-bar"></span>
@@ -83,8 +83,41 @@
 	                                                            </div>
                                                              </c:if>
                                                              
+                                                             
+                                                             
                                                               
-															                                                            	
+                                                             <div class="form-group form-default">
+                                                                <input onblur="localizarCep()" value="${usuario.cep}" type="text" name="cep" id="cep" class="form-control" required="">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Cep</label>
+                                                            </div> 
+                                                            
+                                                            <div class="form-group form-default">
+                                                                <input value="${usuario.logradouro}" type="text" name="logradouro" id="logradouro" class="form-control" required="">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Logradouro</label>
+                                                            </div>
+                                                              
+                                                            <div class="form-group form-default">
+                                                                <input value="${usuario.bairro}" type="text" name="bairro" id="bairro" class="form-control" required="">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Bairro</label>
+                                                            </div>
+															             
+															<div class="form-group form-default">
+                                                                <input value="${usuario.localidade}" type="text" name="localidade" id="localidade" class="form-control" required="">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Localidade</label>
+                                                            </div>
+                                                            
+                                                            <div class="form-group form-default">
+                                                                <input value="${usuario.uf}" type="text" name="uf" id="uf" class="form-control" required="">
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">UF</label>
+                                                            </div>
+                                                                      
+                                                                      
+                                                                                                           	
                                                             <div class="form-group form-default">
                                                                 <input value="${usuario.login}" type="text" name="login" class="form-control" required="">
                                                                 <span class="form-bar"></span>
@@ -99,8 +132,9 @@
                                                             
                                                               <div class="form-group">
 															    <label for="exampleFormControlFile1">Imagem de perfil</label><br>
-															    <img src="" id="fotonome" width="70px">
-															    <input type="file" id="filefoto" accept="image/*" onchange="visualizarImg('fotonome','filefoto')" class="form-control-file" id="exampleFormControlFile1" style="margin-top: 15px;">
+															    
+															    <img src="${usuario.fotoBase64}" id="imgfoto" width="70px">
+															    <input type="file" id="filefoto" name="filefoto" accept="image/*" onchange="visualizarImg('imgfoto','filefoto')" class="form-control-file" id="exampleFormControlFile1" style="margin-top: 15px;">
 															  </div>
                                                             
                                                              
@@ -211,6 +245,49 @@
     
     <!-- JAVASCRIPT -->
     <script type="text/javascript">
+    
+    	// LOCALIZAR CEP
+    	function localizarCep(){
+    		var cep = $("#cep").val();
+    		
+    		$.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+                if (!("erro" in dados)) {
+                    //Atualiza os campos com os valores da consulta.
+                    $("#logradouro").val(dados.logradouro);
+                    $("#bairro").val(dados.bairro);
+                    $("#localidade").val(dados.localidade);
+                    $("#uf").val(dados.uf);
+                     
+                    
+                }else {
+                    //CEP pesquisado não foi encontrado.
+                    limpa_formulário_cep();
+                    alert("CEP não encontrado.");
+                }
+            });
+    		
+    	}
+    	
+    
+    	// VISUALIZAR FOTO
+    	function visualizarImg(imgfoto,filefoto){
+    		
+    		var imgFoto = document.getElementById(imgfoto);
+    		var fileFoto = document.getElementById(filefoto).files[0];
+    		var reader = new FileReader();
+    		
+    		reader.onload = function(){
+    			imgFoto.src = reader.result;
+    		};
+    		
+    		if(fileFoto){
+    			reader.readAsDataURL(fileFoto);
+    		}else{
+    			imgFoto.src = '';
+    		}
+    		
+    	}
     		
 	 	// VER EDITAR
 		function verEditar(id){

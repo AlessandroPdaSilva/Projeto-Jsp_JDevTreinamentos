@@ -13,6 +13,14 @@ public class Login implements Serializable{
 	private String senha;
 	private int userAdm;
 	private String perfil;
+	private String extensaoFoto;
+	private String fotoBase64;
+	
+	private String cep;
+	private String logradouro;
+	private String bairro;
+	private String localidade;
+	private String uf;
 	
 	
 	public String getNome() {
@@ -45,26 +53,72 @@ public class Login implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
 	public int getUserAdm() {
 		return userAdm;
 	}
 	public void setUserAdm(int userAdm) {
 		this.userAdm = userAdm;
 	}
-	
-	
 	public String getPerfil() {
 		return perfil;
 	}
 	public void setPerfil(String perfil) {
 		this.perfil = perfil;
+	}		
+	public String getExtensaoFoto() {
+		return extensaoFoto;
+	}
+	public void setExtensaoFoto(String extensaoFoto) {
+		this.extensaoFoto = extensaoFoto;
+	}
+	public String getFotoBase64() {
+		return fotoBase64;
+	}
+	public void setFotoBase64(String fotoBase64) {
+		this.fotoBase64 = fotoBase64;
+	}
+	
+	
+	public String getCep() {
+		return cep;
+	}
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+	public String getLogradouro() {
+		return logradouro;
+	}
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
+	public String getBairro() {
+		return bairro;
+	}
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+	public String getLocalidade() {
+		return localidade;
+	}
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+	public String getUf() {
+		return uf;
+	}
+	public void setUf(String uf) {
+		this.uf = uf;
 	}
 	@Override
 	public String toString() {
 		return "Login [id=" + id + ", email=" + email + ", nome=" + nome + ", login=" + login + ", senha=" + senha
-				+ ", userAdm=" + userAdm + ", perfil=" + perfil + "]";
+				+ ", userAdm=" + userAdm + ", perfil=" + perfil + ", extensaoFoto=" + extensaoFoto + ", fotoBase64="
+				+ fotoBase64 + "]";
 	}
+	
+	
+	
+	
 	
 	
 	

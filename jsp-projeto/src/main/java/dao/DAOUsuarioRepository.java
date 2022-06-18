@@ -22,38 +22,56 @@ public class DAOUsuarioRepository {
 	// SALVAR 
 	public Login salvarUsuario(Login u) throws Exception {
 		
-		String sql = "INSERT INTO usuario (nome, email, login, senha,perfil) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO usuario (nome, email, login, senha,perfil,cep,logradouro,bairro,localidade,uf) VALUES (?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement salvar = conexao.prepareStatement(sql);
 		salvar.setString(1, u.getNome());
 		salvar.setString(2, u.getEmail());
 		salvar.setString(3, u.getLogin());
 		salvar.setString(4, u.getSenha());
 		salvar.setString(5, u.getPerfil());
+		salvar.setString(6, u.getCep());
+		salvar.setString(7, u.getLogradouro());
+		salvar.setString(8, u.getBairro());
+		salvar.setString(9, u.getLocalidade());
+		salvar.setString(10, u.getUf());
+		
+		
 		
 		salvar.execute();
 		
 		
 		conexao.commit();
+
+		atualizarFoto(u);
 		
 		return this.getUsuarioByLogin(u.getLogin());
+		
+		
 	}
 	
 	// UPDATE
 	public Login editarUsuario(Login u) throws Exception {
 		
-		String sql = "UPDATE usuario SET nome=?, email=?, login=?, senha=?,perfil=? WHERE id= ?";
+		String sql = "UPDATE usuario SET nome=?, email=?, login=?, senha=?, perfil=?, "
+				+ "cep=?, logradouro=?, bairro=?, localidade=?, uf=? WHERE id= ?";
 		PreparedStatement editar = conexao.prepareStatement(sql);
 		editar.setString(1, u.getNome());
 		editar.setString(2, u.getEmail());
 		editar.setString(3, u.getLogin());
 		editar.setString(4, u.getSenha());
 		editar.setString(5, u.getPerfil());
-		editar.setLong(6,u.getId());
+		editar.setString(6, u.getCep());
+		editar.setString(7, u.getLogradouro());
+		editar.setString(8, u.getBairro());
+		editar.setString(9, u.getLocalidade());
+		editar.setString(10, u.getUf());
+		editar.setLong(11,u.getId());
 		
 		editar.execute();
 		
-		
 		conexao.commit();
+		
+		atualizarFoto(u);
 		
 		return this.getUsuarioByLogin(u.getLogin());
 	}
@@ -61,7 +79,7 @@ public class DAOUsuarioRepository {
 	// DELETAR
 	public void deletarUsuario(Long id) throws Exception {
 		
-		String sql = "DELETE FROM usuario WHERE id = ? AND useradm = 0";
+		String sql = "DELETE FROM usuario WHERE id = ?";
 		PreparedStatement deleta = conexao.prepareStatement(sql);
 		deleta.setLong(1, id);
 		
@@ -69,6 +87,25 @@ public class DAOUsuarioRepository {
 		
 		conexao.commit();
 		
+	}
+	
+	
+	
+	
+	// ATUALIZAR FOTO
+	public void atualizarFoto(Login u) throws SQLException {
+		
+		if(u.getFotoBase64() != null) {
+			String sql = "UPDATE usuario SET fotoBase64 = ?, extensaoFoto = ? WHERE login = ?";
+			PreparedStatement salvarFoto = conexao.prepareStatement(sql);
+			salvarFoto.setString(1, u.getFotoBase64());
+			salvarFoto.setString(2, u.getExtensaoFoto());
+			salvarFoto.setString(3, u.getLogin());
+			
+			salvarFoto.execute();
+			
+			conexao.commit();
+		}
 	}
 	
 	
@@ -91,12 +128,22 @@ public class DAOUsuarioRepository {
 			u.setSenha(result.getString("senha"));
 			u.setUserAdm(result.getInt("useradm"));
 			u.setPerfil(result.getString("perfil"));
+			u.setExtensaoFoto(result.getString("extensaoFoto"));
+			u.setFotoBase64(result.getString("fotoBase64"));
+			
+			u.setCep(result.getString("cep"));
+			u.setLogradouro(result.getString("logradouro"));
+			u.setBairro(result.getString("bairro"));
+			u.setLocalidade(result.getString("localidade"));
+			u.setUf(result.getString("uf"));
+			
 		}
 		
 		conexao.commit();
 		
 		return u;
 	}
+	
 	
 	// GET BUSCA USUARIOS
 	public List<Login> getUsuariosBusca(String login) throws Exception {
@@ -119,6 +166,14 @@ public class DAOUsuarioRepository {
 			u.setLogin(result.getString("login"));
 			u.setSenha(result.getString("senha"));
 			u.setPerfil(result.getString("perfil"));
+			u.setExtensaoFoto(result.getString("extensaoFoto"));
+			u.setFotoBase64(result.getString("fotoBase64"));
+			
+			u.setCep(result.getString("cep"));
+			u.setLogradouro(result.getString("logradouro"));
+			u.setBairro(result.getString("bairro"));
+			u.setLocalidade(result.getString("localidade"));
+			u.setUf(result.getString("uf"));
 			
 			usuarios.add(u);
 		}
@@ -126,6 +181,7 @@ public class DAOUsuarioRepository {
 		 
 		return usuarios;
 	}
+	
 	
 	// GET BUSCA USUARIOS
 	public List<Login> getUsuarios() throws Exception {
@@ -148,6 +204,14 @@ public class DAOUsuarioRepository {
 				u.setLogin(result.getString("login"));
 				u.setSenha(result.getString("senha"));
 				u.setPerfil(result.getString("perfil"));
+				u.setExtensaoFoto(result.getString("extensaoFoto"));
+				u.setFotoBase64(result.getString("fotoBase64"));
+				
+				u.setCep(result.getString("cep"));
+				u.setLogradouro(result.getString("logradouro"));
+				u.setBairro(result.getString("bairro"));
+				u.setLocalidade(result.getString("localidade"));
+				u.setUf(result.getString("uf"));
 				
 				usuarios.add(u);
 			}
@@ -155,6 +219,7 @@ public class DAOUsuarioRepository {
 			 
 			return usuarios;
 		}
+	
 		
 	
 	// GET USUARIO BY ID
@@ -175,6 +240,15 @@ public class DAOUsuarioRepository {
 			u.setLogin(result.getString("login"));
 			u.setSenha(result.getString("senha"));
 			u.setPerfil(result.getString("perfil"));
+			u.setExtensaoFoto(result.getString("extensaoFoto"));
+			u.setFotoBase64(result.getString("fotoBase64"));
+			
+			u.setCep(result.getString("cep"));
+			u.setLogradouro(result.getString("logradouro"));
+			u.setBairro(result.getString("bairro"));
+			u.setLocalidade(result.getString("localidade"));
+			u.setUf(result.getString("uf"));
+			
 		}
 		
 		conexao.commit();
