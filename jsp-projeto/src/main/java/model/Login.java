@@ -15,14 +15,14 @@ public class Login implements Serializable{
 	private String perfil;
 	private String extensaoFoto;
 	private String fotoBase64;
-	
+
 	private String cep;
 	private String logradouro;
 	private String bairro;
 	private String localidade;
 	private String uf;
-	
-	
+
+
 	public String getNome() {
 		return nome;
 	}
@@ -64,7 +64,7 @@ public class Login implements Serializable{
 	}
 	public void setPerfil(String perfil) {
 		this.perfil = perfil;
-	}		
+	}
 	public String getExtensaoFoto() {
 		return extensaoFoto;
 	}
@@ -77,8 +77,8 @@ public class Login implements Serializable{
 	public void setFotoBase64(String fotoBase64) {
 		this.fotoBase64 = fotoBase64;
 	}
-	
-	
+
+
 	public String getCep() {
 		return cep;
 	}
@@ -115,14 +115,14 @@ public class Login implements Serializable{
 				+ ", userAdm=" + userAdm + ", perfil=" + perfil + ", extensaoFoto=" + extensaoFoto + ", fotoBase64="
 				+ fotoBase64 + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 }

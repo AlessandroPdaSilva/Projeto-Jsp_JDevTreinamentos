@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
+
 <!DOCTYPE html>
 
 <nav class="navbar header-navbar pcoded-header">
@@ -92,7 +95,15 @@
                           </li>
                           <li class="user-profile header-notification">
                               <a href="#!" class="waves-effect waves-light">
-                                  <img src="<%= request.getContextPath() %>/assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
+                                  <!-- IMAGEM DE PERFIL -->
+                              	 <c:if test="${login.fotoBase64 == null }">
+                              	 	<img class="img-80 img-radius" src="<%= request.getContextPath() %>/principal/perfil-padrao.png" alt="User-Profile-Image">
+                              	 </c:if>
+                              	 <c:if test="${login.fotoBase64 != null }">
+                                  	<img class="img-80 img-radius" src="${login.fotoBase64}" alt="User-Profile-Image">
+                                  </c:if>
+                                  
+                                  
                                   <span>${login.nome}</span>
                                   <i class="ti-angle-down"></i>
                               </a>
@@ -119,7 +130,7 @@
                                   </li>
                                   <li class="waves-effect waves-light">
                                       <a href="<%= request.getContextPath() %>/ServletLogin?acao=logout">
-                                          <i class="ti-layout-sidebar-left"></i> Logout
+                                          <i class="ti-layout-sidebar-left"></i> Sair
                                       </a>
                                   </li>
                               </ul>
