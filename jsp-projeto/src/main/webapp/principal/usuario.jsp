@@ -51,7 +51,7 @@
                                                     <div class="card-block">
                                                     	  
                                                     	 <!-- FORMULARIO -->
-                                                        <form action="<%= request.getContextPath()%>/ServletUsuario" method="POST" enctype="multipart/form-data" class="form-material" id="formulario">
+                                                        <form action="<%= request.getContextPath()%>/principal/ServletUsuario" method="POST" enctype="multipart/form-data" class="form-material" id="formulario">
                                                         	<div class="form-group form-default form-static-label">
                                                                 <input value="${usuario.id}" type="text" name="id" id="id" class="form-control" placeholder="Enter User Name" required="" readonly="readonly">
                                                                 <span class="form-bar"></span>
@@ -141,6 +141,9 @@
                                                             <button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm()">Novo</button>
                                                             <button type="submit" class="btn btn-success waves-effect waves-light">Salvar</button>
                                                             <button type="button" class="btn btn-danger waves-effect waves-light" onclick="excluirUsuario()">Excluir</button>
+                                                            <c:if test="${usuario.id != null}">
+                                                            	<a href="<%= request.getContextPath()%>/principal/ServletTelefone?idUsuario=${usuario.id}" class="btn btn-info">Telefone</a>
+                                                            </c:if>
                                                             <!-- Button trigger modal -->
 															<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#pesquisarUsuario">
 															  Pesquisar Usuario
@@ -169,7 +172,7 @@
 													     	<tr>
 													     		<td><c:out value="${u.id}"></c:out></td>
 													     		<td><c:out value="${u.nome}"></c:out></td>
-													     		<td><a href="<%= request.getContextPath() %>/ServletUsuario?acao=verEditar&id=${u.id}" class="btn btn-success" >Ver</a></td>
+													     		<td><a href="<%= request.getContextPath() %>/principal/ServletUsuario?acao=verEditar&id=${u.id}" class="btn btn-success" >Ver</a></td>
 													     	</tr>
 													     	
 													     </c:forEach>
@@ -179,6 +182,7 @@
 													
 													</div>
 															
+													<!-- PAGINACAO TABELA -->
 		                                            <nav aria-label="Page navigation example">
 													  <ul class="pagination">
 													    
@@ -186,7 +190,7 @@
 													    	int totalPagina = (int) request.getAttribute("totalPagina");	
 													    
 													    	for(int i = 0; i < totalPagina; i++){
-													    		String url = request.getContextPath()+ "/ServletUsuario?acao=paginacao&offset="+(i*5);
+													    		String url = request.getContextPath()+ "/principal/ServletUsuario?acao=paginacao&offset="+(i*5);
 													    		out.print("<li class=\"page-item\"><a class=\"page-link\" href=\""+ url+"\"> "+ (i+1) +"</a></li>");
 													    	}
 													    %>
@@ -245,6 +249,12 @@
 						
 
 			      </div>
+			      
+			      <nav aria-label="Page navigation example">
+					<ul class="pagination" id="paginacaoBuscar">
+					
+					</ul>
+			      </nav>
 			      
 			      <span id="totalresultados"> </span>
 			      
@@ -317,7 +327,7 @@
     
     	// BUSCAR USUARIO
     	function bucarUsuario(){
-    		
+    		 
     		var buscaNome = document.getElementById("buscaNome").value;
     		
     		if(buscaNome != null && buscaNome != "" && buscaNome.trim() != ""){
@@ -329,13 +339,14 @@
    				 method: "get",
    			     url : urlAction,
    			     data : "buscarNome=" + buscaNome + '&acao=buscarUsuario',
-   			     success: function (response) {
+   			     success: function (response, textStatus, xhr) {
    				 
    			    	  var json = JSON.parse(response); 
    			     
    			    	
    			    	  $('#tabelapesquisa > tbody > tr').remove();
-   				 
+   			    	  $("#paginacaoBuscar > li").remove();
+   				 	  // resultado
 		   			  for(var p = 0; p < json.length; p++){
 		   			      $('#tabelapesquisa > tbody').append('<tr> <td>'+json[p].id+'</td> <td> '+json[p].nome+'</td> <td><button onclick="verEditar('+ json[p].id +')" type="button" class="btn btn-info">Ver</button></td></tr>');
 		   			  		
@@ -343,6 +354,15 @@
    			  
 		   			document.getElementById("totalresultados").textContent = "Resultados: " + json.length;
    				  	
+		   			var totalPagina = xhr.getResponseHeader("totalPaginaBusca");
+		   			 
+		   			 
+		   			// paginacao
+		   			for(var i = 0; i < totalPagina; i++){
+		   				var urlPaginacao = urlAction + "?buscarNome=" + buscaNome + "&acao=buscarUsuario&offsetbusca=" + (i * 5);
+		   				
+		   				$("#paginacaoBuscar").append('<li class="page-item"><a class="page-link" href="#" onclick="buscarUsuarioPaginacao(\''+urlPaginacao+'\')">'+ (i + 1) +'</a></li>');
+		   			}
 		   			
    			     }
    			     
@@ -356,6 +376,60 @@
     		}
     	}
     	
+    	
+    	
+    	
+    	// BUSCAR USUARIO PAGINACAO
+    	function buscarUsuarioPaginacao(url){
+			 
+			 var buscaNome = document.getElementById("buscaNome").value;
+	    		
+	    		if(buscaNome != null && buscaNome != "" && buscaNome.trim() != ""){
+	    			
+	    			var urlAction = document.getElementById('formulario').action;
+	    			
+	    			$.ajax({
+	    				
+	   				 method: "get",
+	   			     url : url,
+	   			      
+	   			     success: function (response, textStatus, xhr) {
+	   				 
+	   			    	  var json = JSON.parse(response); 
+	   			     
+	   			    	
+	   			    	  $('#tabelapesquisa > tbody > tr').remove();
+	   			    	  $("#paginacaoBuscar > li").remove();
+	   				 	  // resultado
+			   			  for(var p = 0; p < json.length; p++){
+			   			      $('#tabelapesquisa > tbody').append('<tr> <td>'+json[p].id+'</td> <td> '+json[p].nome+'</td> <td><button onclick="verEditar('+ json[p].id +')" type="button" class="btn btn-info">Ver</button></td></tr>');
+			   			  		
+			   			  }
+	   			  
+			   			document.getElementById("totalresultados").textContent = "Resultados: " + json.length;
+	   				  	
+			   			var totalPagina = xhr.getResponseHeader("totalPaginaBusca");
+			   			 
+			   			 
+			   			// paginacao
+			   			for(var i = 0; i < totalPagina; i++){
+			   				var urlPaginacao = urlAction + "?buscarNome=" + buscaNome + "&acao=buscarUsuario&offsetbusca=" + (i * 5);
+			   				
+			   				$("#paginacaoBuscar").append('<li class="page-item"><a class="page-link" href="#" onclick="buscarUsuarioPaginacao(\''+urlPaginacao+'\')">'+ (i + 1) +'</a></li>');
+			   			}
+			   			
+	   			     }
+	   			     
+	   				
+	    			
+	   			}).fail(function(xhr, status, errorThrown){
+	   				
+	   				alert('Erro ao Buscar usuário ' + xhr.responseText);
+	   				
+	   			})
+	    		}
+    	    
+    	}
     
     	// LIMPAR FORM
     	function limparForm() {

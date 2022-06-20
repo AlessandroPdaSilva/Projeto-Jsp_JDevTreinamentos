@@ -19,7 +19,7 @@ public class DAOUsuarioRepository {
 		conexao = SingleConnection.getConexao();
 	}
 
-	// SALVAR
+	// SALVAR USUARIO
 	public Login salvarUsuario(Login u) throws Exception {
 
 		String sql = "INSERT INTO usuario (nome, email, login, senha,perfil,cep,logradouro,bairro,localidade,uf) VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -49,7 +49,7 @@ public class DAOUsuarioRepository {
 
 	}
 
-	// UPDATE
+	// UPDATE USUARIO
 	public Login editarUsuario(Login u) throws Exception {
 
 		String sql = "UPDATE usuario SET nome=?, email=?, login=?, senha=?, perfil=?, "
@@ -76,7 +76,7 @@ public class DAOUsuarioRepository {
 		return this.getUsuarioByLogin(u.getLogin());
 	}
 
-	// DELETAR
+	// DELETAR USUARIO
 	public void deletarUsuario(Long id) throws Exception {
 
 		String sql = "DELETE FROM usuario WHERE id = ?";
@@ -146,9 +146,10 @@ public class DAOUsuarioRepository {
 
 
 	// GET BUSCA USUARIOS
-	public List<Login> getUsuariosBusca(String login) throws Exception {
+	public List<Login> getUsuariosBusca(String login, int offset) throws Exception {
 
-		String sql = "SELECT * FROM usuario WHERE nome LIKE \"%"+login+"%\" AND useradm = 0";
+		String sql = "SELECT * FROM usuario WHERE nome LIKE \"%"+login+"%\" AND useradm = 0 ORDER BY nome LIMIT 5 OFFSET "+offset;
+		//String sql = "SELECT * FROM usuario WHERE nome LIKE \"%"+login+"%\" AND useradm = 0";
 		PreparedStatement prepara = conexao.prepareStatement(sql);
 
 		ResultSet result = prepara.executeQuery();
@@ -183,11 +184,11 @@ public class DAOUsuarioRepository {
 	}
 
 	// GET USUARIO BY ID
-	public Login getUsuarioById(String id) throws Exception {
+	public Login getUsuarioById(Long id) throws Exception {
 
 		String sql = "SELECT * FROM usuario WHERE id = ? AND useradm = 0";
 		PreparedStatement prepara = conexao.prepareStatement(sql);
-		prepara.setLong(1, Long.parseLong(id));
+		prepara.setLong(1, id);
 
 		ResultSet result = prepara.executeQuery();
 
@@ -317,7 +318,27 @@ public class DAOUsuarioRepository {
 		return pagina.intValue();
 	}
 
+	// TOTAL DE PAGINA BUSCA
+	public int totalPaginaBusca(String login) throws SQLException {
 
+		String sql = "SELECT COUNT(id) AS total FROM usuario WHERE nome LIKE \"%"+login+"%\" AND useradm = 0";
+		PreparedStatement prepara = conexao.prepareStatement(sql); 
+		ResultSet result = prepara.executeQuery();
+		
+		result.next();
+
+		Double resultado = result.getDouble("total");
+		double limit = 5.0;
+
+		Double pagina = resultado / limit;
+		double resto = pagina % 2;
+
+		if(resto > 0) {
+			pagina++;
+		}
+
+		return pagina.intValue();
+	}
 
 
 

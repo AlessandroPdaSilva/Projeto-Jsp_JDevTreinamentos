@@ -62,7 +62,7 @@
                                   <ul class="pcoded-submenu">
                                   	  <c:if test="${login.perfil == 'ADMINISTRADOR'}">
 	                                      <li class=" ">
-	                                          <a href="<%= request.getContextPath() %>/ServletUsuario?acao=listarUsuario" class="waves-effect waves-dark">
+	                                          <a href="<%= request.getContextPath() %>/principal/ServletUsuario?acao=listarUsuario" class="waves-effect waves-dark">
 	                                              <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
 	                                              <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">usuario</span>
 	                                              <span class="pcoded-mcaret"></span>

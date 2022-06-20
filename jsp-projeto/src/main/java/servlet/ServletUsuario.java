@@ -23,7 +23,7 @@ import dao.DAOUsuarioRepository;
 import model.Login;
 
 @MultipartConfig
-@WebServlet(urlPatterns =  {"/ServletUsuario"})
+@WebServlet(urlPatterns = {"/principal/ServletUsuario"})
 public class ServletUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -73,27 +73,38 @@ public class ServletUsuario extends HttpServlet {
 				List<Login> listaUsu = usuarioDao.getUsuarios();
 				request.setAttribute("listaUsuario", listaUsu);
 				request.setAttribute("totalPagina", usuarioDao.totalPagina());
+				
+				String offset = request.getParameter("offsetbusca");
+				
+				if(offset == null || offset.isEmpty()) {
+					offset="0";
+				}
+				
+				
 
-				List<Login> usuarios = usuarioDao.getUsuariosBusca(buscarNome);
+				List<Login> usuarios = usuarioDao.getUsuariosBusca(buscarNome,Integer.parseInt(offset));
 
 				ObjectMapper mapper = new ObjectMapper();
 
  				String json = mapper.writeValueAsString(usuarios);
-
+ 				
+ 				response.addHeader("totalPaginaBusca", ""+usuarioDao.totalPaginaBusca(buscarNome));
 				response.getWriter().write(json);
 
 			} catch (Exception e) {//erro
 				e.printStackTrace();
 			}
 
-
+		
+			
+			
 		// VER EDITAR
 		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("verEditar")){
 
 			String id = request.getParameter("id");
 
 			try {
-				Login log = usuarioDao.getUsuarioById(id);
+				Login log = usuarioDao.getUsuarioById(Long.parseLong(id));
 				//
 				List<Login> listaUsu = usuarioDao.getUsuarios();
 				request.setAttribute("listaUsuario", listaUsu);
@@ -101,7 +112,7 @@ public class ServletUsuario extends HttpServlet {
 
 				request.setAttribute("usuario", log);
 				request.setAttribute("msg", "Usuario em edição !! ");
-				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+				RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 				redirecionar.forward(request, response);
 
 			} catch (Exception e) {//erro
@@ -117,7 +128,7 @@ public class ServletUsuario extends HttpServlet {
 				request.setAttribute("listaUsuario", listaUsu);
 				request.setAttribute("totalPagina", usuarioDao.totalPagina());
 
-				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+				RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 				redirecionar.forward(request, response);
 
 			} catch (Exception e) {//erro
@@ -133,7 +144,7 @@ public class ServletUsuario extends HttpServlet {
 				request.setAttribute("listaUsuario", listaUsu);
 				request.setAttribute("totalPagina", usuarioDao.totalPagina());
 
-				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+				RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 				redirecionar.forward(request, response);
 
 			} catch (Exception e) {// erro paginacao
@@ -141,7 +152,7 @@ public class ServletUsuario extends HttpServlet {
 			}
 
 		}else{
-			request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
+			request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
 		}
 
 
@@ -212,7 +223,7 @@ public class ServletUsuario extends HttpServlet {
 			request.setAttribute("listaUsuario", listaUsu);
 			request.setAttribute("totalPagina", usuarioDao.totalPagina());
 
-			RequestDispatcher pagina = request.getRequestDispatcher("principal/usuario.jsp");
+			RequestDispatcher pagina = request.getRequestDispatcher("/principal/usuario.jsp");
 
 			pagina.forward(request, response);
 
@@ -233,21 +244,21 @@ public class ServletUsuario extends HttpServlet {
 					request.setAttribute("listaUsuario", listaUsu);
 					request.setAttribute("totalPagina", usuarioDao.totalPagina());
 
-					RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+					RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 					redirecionar.forward(request, response);
 
 				}catch (SQLIntegrityConstraintViolationException e3) {// --usuario ja existe (editar)
 
 					e3.printStackTrace();
 					request.setAttribute("msg", "Usuario ja existe, tente outro!!");
-					RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+					RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 					redirecionar.forward(request, response);
 
 				} catch (Exception e2) {// erro editar
 
 					e2.printStackTrace();
 					request.setAttribute("msg", "Erro ao editar !!");
-					RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+					RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 					redirecionar.forward(request, response);
 
 				}
@@ -259,7 +270,7 @@ public class ServletUsuario extends HttpServlet {
 		}catch (Exception e) {// erro salvar
 			e.printStackTrace();
 			request.setAttribute("msg", "Erro ao Salvar: "+e.getMessage());
-			RequestDispatcher redirecionar = request.getRequestDispatcher("principal/usuario.jsp");
+			RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 			redirecionar.forward(request, response);
 		}
 
