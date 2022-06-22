@@ -84,10 +84,16 @@
                                                              </c:if>
                                                              
                                                              
+                                                             <div class="form-group form-default form-static-label">
+                                                                <input value="${usuario.dataNascimento}" type="date" name="dataNascimento" id="dataNascimento" required="" class="form-control" >
+                                                                <span class="form-bar"></span>
+                                                                <label class="float-label">Data de Nascimento:</label>
+                                                            </div>	
+                                                             
                                                              
                                                               
                                                              <div class="form-group form-default">
-                                                                <input onblur="localizarCep()" value="${usuario.cep}" type="text" name="cep" id="cep" class="form-control" required="">
+                                                                <input onblur="localizarCep()" onkeypress="return somenteNumeros(event)" value="${usuario.cep}" type="text" name="cep" id="cep" class="form-control" required="">
                                                                 <span class="form-bar"></span>
                                                                 <label class="float-label">Cep</label>
                                                             </div> 
@@ -140,8 +146,9 @@
                                                              
                                                             <button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm()">Novo</button>
                                                             <button type="submit" class="btn btn-success waves-effect waves-light">Salvar</button>
-                                                            <button type="button" class="btn btn-danger waves-effect waves-light" onclick="excluirUsuario()">Excluir</button>
+                                                            
                                                             <c:if test="${usuario.id != null}">
+                                                            	<button type="button" class="btn btn-danger waves-effect waves-light" onclick="excluirUsuario()">Excluir</button>
                                                             	<a href="<%= request.getContextPath()%>/principal/ServletTelefone?idUsuario=${usuario.id}" class="btn btn-info">Telefone</a>
                                                             </c:if>
                                                             <!-- Button trigger modal -->
@@ -272,6 +279,20 @@
     
     <!-- JAVASCRIPT -->
     <script type="text/javascript">
+    	
+    	// ACEITA SOMENTE NUMEROS
+    	// input >> onkeypress="return somenteNumeros(event)"
+    	function somenteNumeros(e) {
+        var charCode = e.charCode ? e.charCode : e.keyCode;
+         
+	        if (charCode != 8 && charCode != 9) {
+	            
+	            if (charCode < 48 || charCode > 57) {
+	                return false;
+	            }
+	        }
+    	}
+    	 
     
     	// LOCALIZAR CEP
     	function localizarCep(){

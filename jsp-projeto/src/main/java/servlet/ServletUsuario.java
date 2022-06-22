@@ -1,7 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -50,8 +52,11 @@ public class ServletUsuario extends HttpServlet {
 				List<Login> listaUsu = usuarioDao.getUsuarios();
 				request.setAttribute("listaUsuario", listaUsu);
 				request.setAttribute("totalPagina", usuarioDao.totalPagina());
-
-				usuarioDao.deletarUsuario(Long.parseLong(id));
+				
+				if(id != null) {
+					usuarioDao.deletarUsuario(Long.parseLong(id));
+				}
+				
 				response.getWriter().write("Deletado com sucesso!!");
 
 			} catch (Exception e) {// erro
@@ -162,117 +167,112 @@ public class ServletUsuario extends HttpServlet {
 	// POST
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String id = request.getParameter("id");
-		String email = request.getParameter("email");
-		String nome = request.getParameter("nome");
-		String login = request.getParameter("login");
-		String senha= request.getParameter("senha");
-		String perfil = request.getParameter("perfil");
-
-		String cep = request.getParameter("cep");
-		String logradouro = request.getParameter("logradouro");
-		String bairro = request.getParameter("bairro");
-		String localidade = request.getParameter("localidade");
-		String uf = request.getParameter("uf");
-
-		Login log = new Login();
-		log.setId( id != null && !id.isEmpty() ? Long.parseLong(id) : null);
-		log.setNome(nome);
-		log.setEmail(email);
-		log.setLogin(login);
-		log.setSenha(senha);
-		log.setPerfil(perfil != null && !perfil.isEmpty() ? perfil : null);
-		log.setCep(cep);
-		log.setLocalidade(localidade);
-		log.setBairro(bairro);
-		log.setLogradouro(logradouro);
-		log.setUf(uf);
-
-		// imagem de perfil
-		if(ServletFileUpload.isMultipartContent(request)) {
-
-			Part arquivoEnviado = request.getPart("filefoto");// pega foto da tela
-
-			if(arquivoEnviado.getSize() > 0) {
-				byte[] foto = IOUtils.toByteArray(arquivoEnviado.getInputStream());// converte arquivo para byte
-				String extensao = arquivoEnviado.getContentType().split("\\/")[1];
-				new Base64();
-				String fotoEmBase64 = "data:image/" + extensao + ";base64," + Base64.encodeBase64String(foto);
-
-
-				log.setFotoBase64(fotoEmBase64);
-				log.setExtensaoFoto(extensao);
-			}
-
-
-
-
-		}
-
+		
 		try {
+			
+			
+			String id = request.getParameter("id");
+			String email = request.getParameter("email");
+			String nome = request.getParameter("nome");
+			String login = request.getParameter("login");
+			String senha= request.getParameter("senha");
+			String perfil = request.getParameter("perfil");
+			String dataNascimento = request.getParameter("dataNascimento");
+			
+			String cep = request.getParameter("cep");
+			String logradouro = request.getParameter("logradouro");
+			String bairro = request.getParameter("bairro");
+			String localidade = request.getParameter("localidade");
+			String uf = request.getParameter("uf");
 
-			// SALVAR
-			log = usuarioDao.salvarUsuario(log);
+			Login log = new Login();
+			log.setId( id != null && !id.isEmpty() ? Long.parseLong(id) : null);
+			log.setNome(nome);
+			log.setEmail(email);
+			log.setLogin(login);
+			log.setSenha(senha);
+			log.setPerfil(perfil != null && !perfil.isEmpty() ? perfil : null);
+			
+			log.setDataNascimento(dataNascimento);
+			log.setCep(cep);
+			log.setLocalidade(localidade);
+			log.setBairro(bairro);
+			log.setLogradouro(logradouro);
+			log.setUf(uf);
 
-			request.setAttribute("msg", "Salvo com Sucesso!!");
-			request.setAttribute("usuario", log);
+			// imagem de perfil
+			if(ServletFileUpload.isMultipartContent(request)) {
 
-			//
+				Part arquivoEnviado = request.getPart("filefoto");// pega foto da tela
+
+				if(arquivoEnviado.getSize() > 0) {
+					byte[] foto = IOUtils.toByteArray(arquivoEnviado.getInputStream());// converte arquivo para byte
+					String extensao = arquivoEnviado.getContentType().split("\\/")[1];
+					new Base64();
+					String fotoEmBase64 = "data:image/" + extensao + ";base64," + Base64.encodeBase64String(foto);
+
+
+					log.setFotoBase64(fotoEmBase64);
+					log.setExtensaoFoto(extensao);
+				}
+
+			}
+			
+			
+			if(usuarioDao.usuarioExiste(login) > 0) {
+				// EDITAR
+				log = usuarioDao.editarUsuario(log);
+
+				request.setAttribute("usuario", log);
+				request.setAttribute("msg", "Editado com sucesso !! ");
+			}else {
+				// SALVAR
+				log = usuarioDao.salvarUsuario(log);
+
+				request.setAttribute("msg", "Salvo com Sucesso!!");
+				request.setAttribute("usuario", log);
+			}
+			
+			
+
+			// tabela usuario
 			List<Login> listaUsu = usuarioDao.getUsuarios();
 			request.setAttribute("listaUsuario", listaUsu);
 			request.setAttribute("totalPagina", usuarioDao.totalPagina());
 
+			// redirecionamento
 			RequestDispatcher pagina = request.getRequestDispatcher("/principal/usuario.jsp");
-
 			pagina.forward(request, response);
-
-
-
-		}catch(SQLIntegrityConstraintViolationException e1){// --usuario ja existe (salvar)
-
-				// EDITAR
-				try {
-
-					log = usuarioDao.editarUsuario(log);
-
-					request.setAttribute("usuario", log);
-					request.setAttribute("msg", "Editado com sucesso !! ");
-
-					//
-					List<Login> listaUsu = usuarioDao.getUsuarios();
-					request.setAttribute("listaUsuario", listaUsu);
-					request.setAttribute("totalPagina", usuarioDao.totalPagina());
-
-					RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
-					redirecionar.forward(request, response);
-
-				}catch (SQLIntegrityConstraintViolationException e3) {// --usuario ja existe (editar)
-
-					e3.printStackTrace();
-					request.setAttribute("msg", "Usuario ja existe, tente outro!!");
-					RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
-					redirecionar.forward(request, response);
-
-				} catch (Exception e2) {// erro editar
-
-					e2.printStackTrace();
-					request.setAttribute("msg", "Erro ao editar !!");
-					RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
-					redirecionar.forward(request, response);
-
-				}
-
-			//e1.printStackTrace();
-
-
-
-		}catch (Exception e) {// erro salvar
+ 
+			
+		} catch(SQLIntegrityConstraintViolationException e) {// usuario ja existe
 			e.printStackTrace();
-			request.setAttribute("msg", "Erro ao Salvar: "+e.getMessage());
+			request.setAttribute("msg", "Usurio ja existe, tente outro!!");
+			RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
+			redirecionar.forward(request, response);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("msg", "Erro: "+e.getMessage());
 			RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/usuario.jsp");
 			redirecionar.forward(request, response);
 		}
+		
+		
+
+		 
+
+			
+
+		 
+
+				 
+
+		 
+
+
+
+		 
 
 
 

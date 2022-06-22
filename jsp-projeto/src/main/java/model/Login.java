@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Login implements Serializable{
 
@@ -15,6 +16,7 @@ public class Login implements Serializable{
 	private String perfil;
 	private String extensaoFoto;
 	private String fotoBase64;
+	private String dataNascimento;
 
 	private String cep;
 	private String logradouro;
@@ -108,6 +110,15 @@ public class Login implements Serializable{
 	}
 	public void setUf(String uf) {
 		this.uf = uf;
+	}
+	
+	
+	
+	public String getDataNascimento() {
+		return dataNascimento;
+	}
+	public void setDataNascimento(String dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 	@Override
 	public String toString() {

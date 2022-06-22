@@ -56,6 +56,16 @@ public class DAOTelefoneRepository {
 		
 		conexao.commit();
 	}
+	
+	// DELETAR TELEFONE USUARIO
+	public void deletarTelefoneUsuario(Long idUsuario) throws Exception {
+		String sql = "DELETE FROM telefone WHERE usuario_id = ?";
+		PreparedStatement deletar = conexao.prepareStatement(sql);
+		deletar.setLong(1, idUsuario);
+		deletar.executeUpdate();
+		
+		conexao.commit();
+	}
 			
 	// GET TELEFONES USUARIO
 	public List<Telefone> getTelefonesUsuario(Long idUsuario) throws Exception{
@@ -66,14 +76,15 @@ public class DAOTelefoneRepository {
 		
 		ResultSet result = prepara.executeQuery();
 		
-		Telefone tel = new Telefone();
+		
 		List<Telefone> listaTel = new ArrayList<Telefone>();
 		
 		while(result.next()) {
 			
+			Telefone tel = new Telefone();
 			tel.setId(result.getLong("id"));
 			tel.setUsuario(usuDao.getUsuarioById(idUsuario));
-			tel.setNumero(result.getString("telefone"));
+			tel.setNumero(result.getString("numero"));
 			
 			listaTel.add(tel);
 		}

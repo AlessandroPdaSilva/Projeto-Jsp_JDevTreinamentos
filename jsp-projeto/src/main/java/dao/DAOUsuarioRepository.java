@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import model.Login;
 public class DAOUsuarioRepository {
 
 	private Connection conexao;
+	
 
 	// CONSTRUTOR
 	public DAOUsuarioRepository(){
@@ -22,7 +24,7 @@ public class DAOUsuarioRepository {
 	// SALVAR USUARIO
 	public Login salvarUsuario(Login u) throws Exception {
 
-		String sql = "INSERT INTO usuario (nome, email, login, senha,perfil,cep,logradouro,bairro,localidade,uf) VALUES (?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO usuario (nome, email, login, senha,perfil,cep,logradouro,bairro,localidade,uf,dataNascimento) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement salvar = conexao.prepareStatement(sql);
 		salvar.setString(1, u.getNome());
 		salvar.setString(2, u.getEmail());
@@ -32,9 +34,9 @@ public class DAOUsuarioRepository {
 		salvar.setString(6, u.getCep());
 		salvar.setString(7, u.getLogradouro());
 		salvar.setString(8, u.getBairro());
-		salvar.setString(9, u.getLocalidade());
+		salvar.setString(9, u.getLocalidade());;
 		salvar.setString(10, u.getUf());
-
+		salvar.setString(11, u.getDataNascimento());
 
 
 		salvar.execute();
@@ -53,7 +55,7 @@ public class DAOUsuarioRepository {
 	public Login editarUsuario(Login u) throws Exception {
 
 		String sql = "UPDATE usuario SET nome=?, email=?, login=?, senha=?, perfil=?, "
-				+ "cep=?, logradouro=?, bairro=?, localidade=?, uf=? WHERE id= ?";
+				+ "cep=?, logradouro=?, bairro=?, localidade=?, uf=?, dataNascimento=? WHERE id= ?";
 		PreparedStatement editar = conexao.prepareStatement(sql);
 		editar.setString(1, u.getNome());
 		editar.setString(2, u.getEmail());
@@ -65,7 +67,8 @@ public class DAOUsuarioRepository {
 		editar.setString(8, u.getBairro());
 		editar.setString(9, u.getLocalidade());
 		editar.setString(10, u.getUf());
-		editar.setLong(11,u.getId());
+		editar.setString(11, u.getDataNascimento());
+		editar.setLong(12,u.getId());
 
 		editar.execute();
 
@@ -78,6 +81,8 @@ public class DAOUsuarioRepository {
 
 	// DELETAR USUARIO
 	public void deletarUsuario(Long id) throws Exception {
+		DAOTelefoneRepository telDao = new DAOTelefoneRepository();
+		telDao.deletarTelefoneUsuario(id);
 
 		String sql = "DELETE FROM usuario WHERE id = ?";
 		PreparedStatement deleta = conexao.prepareStatement(sql);
@@ -143,6 +148,23 @@ public class DAOUsuarioRepository {
 
 		return u;
 	}
+
+	// USUARIO EXISTE
+		public int usuarioExiste(String login) throws Exception {
+			
+			String sql = "SELECT COUNT(id) AS t FROM usuario WHERE login = ?";
+			PreparedStatement prepara = conexao.prepareStatement(sql);
+			prepara.setString(1, login);
+			
+			ResultSet result = prepara.executeQuery();
+
+			result.next();
+
+			int resultado = result.getInt("t");
+			 
+			 
+			return resultado;
+		}
 
 
 	// GET BUSCA USUARIOS
