@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -155,7 +156,40 @@ public class ServletUsuario extends HttpServlet {
 			} catch (Exception e) {// erro paginacao
 				e.printStackTrace();
 			}
-
+			
+		// IMPRIMIR RELATORIO
+		}else if(!acao.isEmpty() && acao != null && acao.equalsIgnoreCase("imprimirRelatorio")){
+			
+			try {
+				
+				
+				String dataInicial = request.getParameter("dataInicial");
+				String dataFinal = request.getParameter("dataFinal");
+				
+				List<Login> usuarios = new ArrayList<Login>();
+				
+				if(dataInicial == null || dataFinal == null && dataInicial.isEmpty() || dataFinal.isEmpty()) {
+					usuarios = usuarioDao.getUsuarios();
+					request.setAttribute("listaUsuario", usuarios);
+				}else {
+					usuarios = usuarioDao.getUsuarios(dataInicial,dataFinal);
+					request.setAttribute("listaUsuario", usuarios);
+				}
+				
+				
+				
+				request.setAttribute("dataInicial",dataInicial);
+				request.setAttribute("dataFinal",dataFinal);
+				request.getRequestDispatcher("/principal/relatorio-usuario.jsp").forward(request, response);
+				
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+			
 		}else{
 			request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
 		}

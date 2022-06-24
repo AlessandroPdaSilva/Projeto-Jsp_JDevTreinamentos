@@ -141,6 +141,7 @@ public class DAOUsuarioRepository {
 			u.setBairro(result.getString("bairro"));
 			u.setLocalidade(result.getString("localidade"));
 			u.setUf(result.getString("uf"));
+			u.setDataNascimento(result.getString("dataNascimento"));
 
 		}
 
@@ -197,6 +198,7 @@ public class DAOUsuarioRepository {
 			u.setBairro(result.getString("bairro"));
 			u.setLocalidade(result.getString("localidade"));
 			u.setUf(result.getString("uf"));
+			u.setDataNascimento(result.getString("dataNascimento"));
 
 			usuarios.add(u);
 		}
@@ -231,6 +233,7 @@ public class DAOUsuarioRepository {
 			u.setBairro(result.getString("bairro"));
 			u.setLocalidade(result.getString("localidade"));
 			u.setUf(result.getString("uf"));
+			u.setDataNascimento(result.getString("dataNascimento"));
 
 		}
 
@@ -245,7 +248,7 @@ public class DAOUsuarioRepository {
 	// GET BUSCA USUARIOS
 	public List<Login> getUsuarios() throws Exception {
 
-			String sql = "SELECT * FROM usuario WHERE useradm = 0 LIMIT 5";
+			String sql = "SELECT * FROM usuario WHERE useradm = 0 ";
 			PreparedStatement prepara = conexao.prepareStatement(sql);
 
 			ResultSet result = prepara.executeQuery();
@@ -271,6 +274,7 @@ public class DAOUsuarioRepository {
 				u.setBairro(result.getString("bairro"));
 				u.setLocalidade(result.getString("localidade"));
 				u.setUf(result.getString("uf"));
+				u.setDataNascimento(result.getString("dataNascimento"));
 
 				usuarios.add(u);
 			}
@@ -308,6 +312,7 @@ public class DAOUsuarioRepository {
 				u.setBairro(result.getString("bairro"));
 				u.setLocalidade(result.getString("localidade"));
 				u.setUf(result.getString("uf"));
+				u.setDataNascimento(result.getString("dataNascimento"));
 
 				usuarios.add(u);
 			}
@@ -316,7 +321,47 @@ public class DAOUsuarioRepository {
 			return usuarios;
 		}
 
+	
+	// GET BUSCA USUARIOS
+		public List<Login> getUsuarios(String dataInicial, String dataFinal) throws Exception {
 
+				String sql = "SELECT * FROM usuario WHERE useradm = 0 and dataNascimento >= ? and dataNascimento <= ? ";
+				PreparedStatement prepara = conexao.prepareStatement(sql);
+				prepara.setString(1, dataInicial);
+				prepara.setString(2, dataFinal);
+				
+				ResultSet result = prepara.executeQuery();
+
+
+				List<Login> usuarios = new ArrayList<>();
+
+
+				while(result.next()) {
+
+					Login u = new Login();
+					u.setId(result.getLong("id"));
+					u.setEmail(result.getString("email"));
+					u.setNome(result.getString("nome"));
+					u.setLogin(result.getString("login"));
+					u.setSenha(result.getString("senha"));
+					u.setPerfil(result.getString("perfil"));
+					u.setExtensaoFoto(result.getString("extensaoFoto"));
+					u.setFotoBase64(result.getString("fotoBase64"));
+
+					u.setCep(result.getString("cep"));
+					u.setLogradouro(result.getString("logradouro"));
+					u.setBairro(result.getString("bairro"));
+					u.setLocalidade(result.getString("localidade"));
+					u.setUf(result.getString("uf"));
+					u.setDataNascimento(result.getString("dataNascimento"));
+
+					usuarios.add(u);
+				}
+
+
+				return usuarios;
+			}
+	
 
 	// TOTAL DE PAGINA
 	public int totalPagina() throws SQLException {
